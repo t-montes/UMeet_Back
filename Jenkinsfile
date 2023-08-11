@@ -36,6 +36,7 @@ pipeline {
              script {
                 docker.image('citools-isis2603:latest').inside('-u root') {
                    sh '''
+                      chown -R root:root .
                       npm i -s
                       nest build
                    '''
@@ -48,6 +49,7 @@ pipeline {
              script {
                 docker.image('citools-isis2603:latest').inside('-u root') {
                    sh '''
+                      chown -R root:root .
                       npm run test:cov
                    '''
                 }
