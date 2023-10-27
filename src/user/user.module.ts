@@ -6,8 +6,8 @@ import { UserEntity } from './user.entity';
 import { CalendarEntity } from 'src/calendar/calendar.entity';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([UserEntity, CalendarEntity])],
-    controllers: [UserController],
-    providers: [UserService],
+  imports: [TypeOrmModule.forFeature([UserEntity, CalendarEntity])],
+  controllers: [UserController],
+  providers: [UserService],
 })
 export class UserModule {}
