@@ -15,7 +15,7 @@ import { UserEntity } from './user/user.entity';
             username: 'postgres',
             password: 'postgres',
             database: 'umeet',
-            entities: [UserEntity],
+            entities: [UserEntity /* TODO: Add all entities */],
             dropSchema: true,
             synchronize: true,
             keepConnectionAlive: true,
