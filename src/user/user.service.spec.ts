@@ -4,18 +4,21 @@ import { Repository } from 'typeorm';
 import { TypeOrmTestingConfig } from '../shared/testing-utils/typeorm-testing-config';
 import { faker } from '@faker-js/faker';
 import { UserEntity } from './user.entity';
+import { CalendarEntity } from '../calendar/calendar.entity';
 import { UserService } from './user.service';
 
 describe('UserService', () => {
     let service: UserService;
-    let repository: Repository<UserEntity>;
+    let userRepository: Repository<UserEntity>;
+    let calendarRepository: Repository<CalendarEntity>;
     let usersList: UserEntity[] = [];
+    let calendar: CalendarEntity;
 
     const seedDatabase = async () => {
-        repository.clear();
+        userRepository.clear();
         usersList = [];
         for (let i = 0; i < 5; i++) {
-            const user: UserEntity = await repository.save({
+            const user: UserEntity = await userRepository.save({
                 name: faker.person.fullName(),
                 login: faker.internet.userName(),
                 email: faker.internet.email(),
@@ -23,6 +26,11 @@ describe('UserService', () => {
             });
             usersList.push(user);
         }
+
+        calendarRepository.clear();
+        calendar = await calendarRepository.save({
+            color: faker.internet.color(),
+        });
     };
 
     beforeEach(async () => {
@@ -32,8 +40,11 @@ describe('UserService', () => {
         }).compile();
 
         service = module.get<UserService>(UserService);
-        repository = module.get<Repository<UserEntity>>(
+        userRepository = module.get<Repository<UserEntity>>(
             getRepositoryToken(UserEntity),
+        );
+        calendarRepository = module.get<Repository<CalendarEntity>>(
+            getRepositoryToken(CalendarEntity),
         );
         await seedDatabase();
     });
@@ -72,12 +83,13 @@ describe('UserService', () => {
             login: faker.internet.userName(),
             email: faker.internet.email(),
             password: faker.internet.password(),
+            calendar,
         };
 
         const newUser: UserEntity = await service.create(user);
         expect(newUser).not.toBeNull();
 
-        const storedUser: UserEntity = await repository.findOne({
+        const storedUser: UserEntity = await userRepository.findOne({
             where: { id: newUser.id },
         });
         expect(storedUser).not.toBeNull();
@@ -88,25 +100,21 @@ describe('UserService', () => {
     });
 
     it('update should modify an user', async () => {
-        const storedUser: UserEntity = usersList[0];
-        const user: UserEntity = {
-            id: storedUser.id,
-            name: faker.person.fullName(),
-            login: faker.internet.userName(),
-            email: faker.internet.email(),
-            password: faker.internet.password(),
-        };
+        const user: UserEntity = usersList[0];
+        user.name = faker.person.fullName();
+        user.login = faker.internet.userName();
 
-        const updatedUser: UserEntity = await service.update(
-            storedUser.id,
-            user,
-        );
-
+        const updatedUser: UserEntity = await service.update(user.id, user);
         expect(updatedUser).not.toBeNull();
-        expect(updatedUser.name).toEqual(user.name);
-        expect(updatedUser.login).toEqual(user.login);
-        expect(updatedUser.email).toEqual(user.email);
-        expect(updatedUser.password).toEqual(user.password);
+
+        const storedUser: UserEntity = await userRepository.findOne({
+            where: { id: user.id },
+        });
+        expect(storedUser).not.toBeNull();
+        expect(storedUser.name).toEqual(user.name);
+        expect(storedUser.login).toEqual(user.login);
+        expect(storedUser.email).toEqual(user.email);
+        expect(storedUser.password).toEqual(user.password);
     });
 
     it('update should throw an exception for an invalid user', async () => {
@@ -117,6 +125,7 @@ describe('UserService', () => {
                 login: faker.internet.userName(),
                 email: faker.internet.email(),
                 password: faker.internet.password(),
+                calendar,
             }),
         ).rejects.toHaveProperty(
             'message',
@@ -127,7 +136,7 @@ describe('UserService', () => {
     it('delete should remove an user', async () => {
         const storedUser: UserEntity = usersList[0];
         await service.delete(storedUser.id);
-        const user: UserEntity = await repository.findOne({
+        const user: UserEntity = await userRepository.findOne({
             where: { id: storedUser.id },
         });
         expect(user).toBeNull();

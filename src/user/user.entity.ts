@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
+import { CalendarEntity } from '../calendar/calendar.entity';
 
 @Entity()
 export class UserEntity {
@@ -16,4 +17,7 @@ export class UserEntity {
 
     @Column()
     password: string;
+
+    @OneToOne(() => CalendarEntity, (calendar) => calendar.user)
+    calendar: CalendarEntity;
 }
