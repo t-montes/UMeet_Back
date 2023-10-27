@@ -1,5 +1,5 @@
 {
-  "name": "misw-4403-base",
+  "name": "umeet",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -22,10 +22,12 @@
   },
   "dependencies": {
     "@nestjs/common": "^9.3.9",
+    "@nestjs/config": "^3.1.1",
     "@nestjs/core": "^9.3.9",
     "@nestjs/platform-express": "^9.3.9",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
+    "morgan": "^1.10.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^4.4.0",
     "rxjs": "^7.8.0"
