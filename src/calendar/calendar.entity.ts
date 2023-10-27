@@ -12,7 +12,8 @@ export class CalendarEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  // color with a default value
+  @Column({ default: '#ffffff' })
   color: string;
 
   @OneToOne(() => UserEntity, (user) => user.calendar)
