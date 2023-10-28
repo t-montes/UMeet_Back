@@ -5,6 +5,7 @@ import {
   OneToOne,
   JoinColumn,
 } from 'typeorm';
+import { IsHexColor } from 'class-validator';
 import { UserEntity } from '../user/user.entity';
 
 @Entity()
@@ -14,6 +15,7 @@ export class CalendarEntity {
 
   // color with a default value
   @Column({ default: '#ffffff' })
+  @IsHexColor()
   color: string;
 
   @OneToOne(() => UserEntity, (user) => user.calendar)
