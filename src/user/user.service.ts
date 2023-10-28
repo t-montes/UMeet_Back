@@ -21,7 +21,7 @@ export class UserService {
   async findOne(id: string): Promise<UserEntity> {
     const user: UserEntity = await this.userRepository.findOne({
       where: { id },
-      /*relations: ['friends', 'groups'],*/
+      relations: ['calendar' /*, 'friends', 'groups' */],
     });
     if (!user)
       throw new BadRequestException('The user with the given id was not found');
@@ -78,10 +78,13 @@ export class UserService {
   async delete(id: string) {
     const user: UserEntity = await this.userRepository.findOne({
       where: { id },
+      relations: ['calendar'],
     });
+
     if (!user)
       throw new BadRequestException('The user with the given id was not found');
 
+    await this.calendarRepository.remove(user.calendar);
     await this.userRepository.remove(user);
   }
 }
