@@ -1,19 +1,37 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  OneToOne,
+  Unique,
+} from 'typeorm';
+import { IsEmail, Matches } from 'class-validator';
+import { CalendarEntity } from '../calendar/calendar.entity';
 
 @Entity()
+@Unique('unique-login', ['login'])
+@Unique('unique-email', ['email'])
 export class UserEntity {
-    @PrimaryGeneratedColumn('uuid')
-    id: string;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-    @Column()
-    name: string;
+  @Column()
+  name: string;
 
-    @Column({ unique: true })
-    login: string;
+  @Column()
+  login: string;
 
-    @Column()
-    email: string;
+  @Column()
+  @IsEmail()
+  email: string;
 
-    @Column()
-    password: string;
+  @Column({ select: false })
+  @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
+    message:
+      'password must have at least one uppercase, lowercase and number or special character',
+  })
+  password: string;
+
+  @OneToOne(() => CalendarEntity, (calendar) => calendar.user)
+  calendar: CalendarEntity;
 }
