@@ -5,7 +5,7 @@ import {
   OneToOne,
   Unique,
 } from 'typeorm';
-import { IsEmail } from 'class-validator';
+import { IsEmail, Matches } from 'class-validator';
 import { CalendarEntity } from '../calendar/calendar.entity';
 
 @Entity()
@@ -26,6 +26,10 @@ export class UserEntity {
   email: string;
 
   @Column({ select: false })
+  @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
+    message:
+      'password must have at least one uppercase, lowercase and number or special character',
+  })
   password: string;
 
   @OneToOne(() => CalendarEntity, (calendar) => calendar.user)
