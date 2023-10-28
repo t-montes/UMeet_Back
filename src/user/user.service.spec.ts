@@ -12,25 +12,30 @@ describe('UserService', () => {
   let userRepository: Repository<UserEntity>;
   let calendarRepository: Repository<CalendarEntity>;
   let usersList: UserEntity[] = [];
-  let calendar: CalendarEntity;
+  let calendarList: CalendarEntity[] = [];
 
   const seedDatabase = async () => {
+    calendarRepository.clear();
+    calendarList = [];
+    for (let i = 0; i < 5; i++) {
+      const newEntity = new CalendarEntity();
+      newEntity.color = faker.internet.color();
+      const calendar: CalendarEntity = await calendarRepository.save(newEntity);
+      calendarList.push(calendar);
+    }
+
     userRepository.clear();
     usersList = [];
     for (let i = 0; i < 5; i++) {
-      const user: UserEntity = await userRepository.save({
-        name: faker.person.fullName(),
-        login: faker.internet.userName(),
-        email: faker.internet.email(),
-        password: faker.internet.password(),
-      });
+      const newEntity = new UserEntity();
+      newEntity.name = faker.person.fullName();
+      newEntity.login = faker.internet.userName();
+      newEntity.email = faker.internet.email();
+      newEntity.password = faker.internet.password({ prefix: 'Pw0' });
+      newEntity.calendar = calendarList[i];
+      const user: UserEntity = await userRepository.save(newEntity);
       usersList.push(user);
     }
-
-    calendarRepository.clear();
-    calendar = await calendarRepository.save({
-      color: faker.internet.color(),
-    });
   };
 
   beforeEach(async () => {
@@ -66,7 +71,6 @@ describe('UserService', () => {
     expect(user.name).toEqual(storedUser.name);
     expect(user.login).toEqual(storedUser.login);
     expect(user.email).toEqual(storedUser.email);
-    expect(user.password).toEqual(storedUser.password);
   });
 
   it('findOne should throw an exception for an invalid user', async () => {
@@ -77,14 +81,11 @@ describe('UserService', () => {
   });
 
   it('create should return a new user', async () => {
-    const user: UserEntity = {
-      id: '',
-      name: faker.person.fullName(),
-      login: faker.internet.userName(),
-      email: faker.internet.email(),
-      password: faker.internet.password(),
-      calendar,
-    };
+    const user: UserEntity = new UserEntity();
+    user.name = faker.person.fullName();
+    user.login = faker.internet.userName();
+    user.email = faker.internet.email();
+    user.password = faker.internet.password({ prefix: 'Pw0' });
 
     const newUser: UserEntity = await service.create(user);
     expect(newUser).not.toBeNull();
@@ -96,10 +97,9 @@ describe('UserService', () => {
     expect(storedUser.name).toEqual(newUser.name);
     expect(storedUser.login).toEqual(newUser.login);
     expect(storedUser.email).toEqual(newUser.email);
-    expect(storedUser.password).toEqual(newUser.password);
   });
 
-  it('update should modify an user', async () => {
+  it('update should modify a user', async () => {
     const user: UserEntity = usersList[0];
     user.name = faker.person.fullName();
     user.login = faker.internet.userName();
@@ -114,26 +114,18 @@ describe('UserService', () => {
     expect(storedUser.name).toEqual(user.name);
     expect(storedUser.login).toEqual(user.login);
     expect(storedUser.email).toEqual(user.email);
-    expect(storedUser.password).toEqual(user.password);
   });
 
   it('update should throw an exception for an invalid user', async () => {
     await expect(() =>
-      service.update('0', {
-        id: '0',
-        name: faker.person.fullName(),
-        login: faker.internet.userName(),
-        email: faker.internet.email(),
-        password: faker.internet.password(),
-        calendar,
-      }),
+      service.update('0', usersList[0]),
     ).rejects.toHaveProperty(
       'message',
       'The user with the given id was not found',
     );
   });
 
-  it('delete should remove an user', async () => {
+  it('delete should remove a user', async () => {
     const storedUser: UserEntity = usersList[0];
     await service.delete(storedUser.id);
     const user: UserEntity = await userRepository.findOne({

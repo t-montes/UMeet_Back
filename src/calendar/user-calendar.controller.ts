@@ -2,7 +2,7 @@ import { Controller } from '@nestjs/common';
 import { UseInterceptors } from '@nestjs/common';
 import { BusinessErrorsInterceptor } from '../shared/interceptors/business-errors/business-errors.interceptor';
 import { plainToInstance } from 'class-transformer';
-import { Get, Post, Put, Delete, Param, Body, HttpCode } from '@nestjs/common';
+import { Put, Param, Body } from '@nestjs/common';
 import { CalendarService } from './calendar.service';
 import { CalendarDTO } from './calendar.dto';
 import { CalendarEntity } from './calendar.entity';

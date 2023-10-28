@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { QueryFailedError, Repository } from 'typeorm';
 import { UserEntity } from './user.entity';
-import { CalendarEntity } from 'src/calendar/calendar.entity';
+import { CalendarEntity } from '../calendar/calendar.entity';
 import { validateEntity } from '../shared/utils/validator';
 
 @Injectable()
@@ -42,7 +42,6 @@ export class UserService {
           case 23505: // unique_violation
             switch (e.driverError.constraint) {
               case 'unique-login':
-                console.log(e.driverError.code);
                 throw new BadRequestException('The login is already in use');
               case 'unique-email':
                 throw new BadRequestException('The email is already in use');
