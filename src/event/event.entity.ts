@@ -1,6 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { IsUrl, IsHexColor } from 'class-validator';
 import { CalendarEntity } from '../calendar/calendar.entity';
+import { IsOptional } from '../shared/utils';
 
 @Entity()
 export class EventEntity {
@@ -13,14 +14,15 @@ export class EventEntity {
   @Column()
   location: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, select: false })
   @IsUrl()
+  @IsOptional()
   link: string;
 
   @Column()
   isPrivate: boolean;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, select: false })
   alert: number;
 
   @Column()
@@ -29,7 +31,7 @@ export class EventEntity {
   @Column()
   endDate: Date;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, select: false })
   description: string;
 
   @Column({ default: '#ffffff' })

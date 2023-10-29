@@ -9,7 +9,7 @@ import { CalendarEntity } from './calendar.entity';
 import { UserEntity } from '../user/user.entity';
 // import { GroupEntity } from '../group/group.entity';
 import { EventEntity } from '../event/event.entity';
-import { validateEntity } from '../shared/utils/validator';
+import { validateEntity } from '../shared/utils';
 
 @Injectable()
 export class CalendarService {
@@ -47,6 +47,7 @@ export class CalendarService {
     return owner.calendar;
   }
 
+  @validateEntity
   async createEvent(
     user: boolean, // true if owner is a user, false if owner is a group
     ownerId: string,
