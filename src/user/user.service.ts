@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { QueryFailedError, Repository } from 'typeorm';
 import { UserEntity } from './user.entity';
 import { CalendarEntity } from '../calendar/calendar.entity';
-import { validateEntity } from '../shared/utils/validator';
+import { validateEntity } from '../shared/utils';
 
 @Injectable()
 export class UserService {
@@ -49,7 +49,9 @@ export class UserService {
                 throw e;
             }
           case 23502: // not_null_violation
-            throw new BadRequestException('All fields are required');
+            throw new BadRequestException(
+              `Field '${e.driverError.column}' is required`,
+            );
           default:
             throw e;
         }
@@ -69,7 +71,23 @@ export class UserService {
 
     user.id = id;
 
-    const updatedUser = await this.userRepository.save(user);
+    const updatedUser = await this.userRepository
+      .save(user)
+      .catch((e: QueryFailedError) => {
+        switch (+e.driverError.code) {
+          case 23505: // unique_violation
+            switch (e.driverError.constraint) {
+              case 'unique-login':
+                throw new BadRequestException('The login is already in use');
+              case 'unique-email':
+                throw new BadRequestException('The email is already in use');
+              default:
+                throw e;
+            }
+          default:
+            throw e;
+        }
+      });
     delete updatedUser.password;
     return updatedUser;
   }
@@ -83,7 +101,6 @@ export class UserService {
     if (!user)
       throw new BadRequestException('The user with the given id was not found');
 
-    await this.calendarRepository.remove(user.calendar);
     await this.userRepository.remove(user);
   }
 }

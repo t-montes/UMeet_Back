@@ -1,6 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { IsUrl, IsHexColor } from 'class-validator';
 import { CalendarEntity } from '../calendar/calendar.entity';
+import { IsOptional } from '../shared/utils';
 
 @Entity()
 export class EventEntity {
@@ -13,29 +14,35 @@ export class EventEntity {
   @Column()
   location: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, select: false })
   @IsUrl()
+  @IsOptional()
   link: string;
 
   @Column()
   isPrivate: boolean;
 
-  @Column()
+  @Column({ nullable: true, select: false })
   alert: number;
 
   @Column()
   startDate: Date;
 
-  @Column()
+  @Column({ select: false })
   endDate: Date;
 
-  @Column({ nullable: true })
+  @Column()
+  visualEndDate: Date;
+
+  @Column({ nullable: true, select: false })
   description: string;
 
   @Column({ default: '#ffffff' })
   @IsHexColor()
   color: string;
 
-  @ManyToOne(() => CalendarEntity, (calendar) => calendar.events)
+  @ManyToOne(() => CalendarEntity, (calendar) => calendar.events, {
+    onDelete: 'CASCADE',
+  })
   calendar: CalendarEntity;
 }

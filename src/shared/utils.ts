@@ -1,5 +1,6 @@
-import { validate } from 'class-validator';
+import { validate, ValidationOptions, ValidateIf } from 'class-validator';
 import { BadRequestException } from '@nestjs/common';
+import { Repository } from 'typeorm';
 
 /**
  * Decorator to validate an entity.
@@ -42,4 +43,17 @@ export function validateEntity(
 
     return originalMethod.apply(this, args);
   };
+}
+
+export function IsOptional(validationOptions?: ValidationOptions) {
+  // IsOptional but also allow empty string
+  return ValidateIf((obj, value) => {
+    return value !== null && value !== undefined && value !== '';
+  }, validationOptions);
+}
+
+export function getCols<T>(repository: Repository<T>): (keyof T)[] {
+  return repository.metadata.columns.map(
+    (col) => col.propertyName,
+  ) as (keyof T)[];
 }

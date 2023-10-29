@@ -4,12 +4,12 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { QueryFailedError, Repository } from 'typeorm';
 import { CalendarEntity } from './calendar.entity';
 import { UserEntity } from '../user/user.entity';
 // import { GroupEntity } from '../group/group.entity';
 import { EventEntity } from '../event/event.entity';
-import { validateEntity } from '../shared/utils/validator';
+import { validateEntity } from '../shared/utils';
 
 @Injectable()
 export class CalendarService {
@@ -22,9 +22,101 @@ export class CalendarService {
     private readonly eventRepository: Repository<EventEntity>,
   ) {}
 
-  // TODO: Get events from calendar
+  async getEvents(user: boolean, ownerId: string): Promise<CalendarEntity> {
+    let owner: UserEntity /* | GroupEntity */;
+    if (user) {
+      owner = await this.userRepository.findOne({
+        where: { id: ownerId },
+        relations: ['calendar', 'calendar.events'],
+      });
+      if (!owner)
+        throw new BadRequestException(
+          'The user with the given id was not found',
+        );
+    } /* else {
+      owner = await this.groupRepository.findOne({
+        where: { id: ownerId },
+        relations: ['calendar', 'calendar.events'],
+      });
+      if (!owner)
+        throw new BadRequestException(
+          'The group with the given id was not found',
+        );
+    } */
 
-  // TODO: Create and add event to calendar
+    return owner.calendar;
+  }
+
+  @validateEntity
+  async createEvent(
+    user: boolean, // true if owner is a user, false if owner is a group
+    ownerId: string,
+    event: EventEntity,
+  ): Promise<EventEntity> {
+    let owner: UserEntity /* | GroupEntity */;
+    if (user) {
+      owner = await this.userRepository.findOne({
+        where: { id: ownerId },
+        relations: ['calendar', 'calendar.events'],
+      });
+      if (!owner)
+        throw new BadRequestException(
+          'The user with the given id was not found',
+        );
+    } /* else {
+      owner = await this.groupRepository.findOne({
+        where: { id: ownerId },
+        relations: ['calendar', 'calendar.events'],
+      });
+      if (!owner)
+        throw new BadRequestException(
+          'The group with the given id was not found',
+        );
+    } */
+
+    event.startDate = new Date(event.startDate);
+    event.endDate = new Date(event.endDate);
+
+    // If endDate or startDate are not divisible by 5 minutes, throw an error
+    if (
+      event.endDate.getTime() % 300000 !== 0 ||
+      event.startDate.getTime() % 300000 !== 0
+    )
+      throw new BadRequestException('The dates must be divisible by 5 minutes');
+
+    // If endDate is prior to startDate, throw an error
+    if (event.endDate.getTime() < event.startDate.getTime())
+      throw new BadRequestException(
+        'The end date must be after the start date',
+      );
+
+    event.visualEndDate =
+      event.endDate.getTime() - event.startDate.getTime() < 1200000
+        ? new Date(event.startDate.getTime() + 1200000)
+        : event.endDate;
+
+    // TODO: fail if day of endDate is different as day of startDate (not supported yet)
+    // TODO: fail if event overlaps with another event (not supported yet)
+    // TODO: return the event in GMT-5 timezone
+
+    event.calendar = owner.calendar;
+    const persistedEvent = await this.eventRepository
+      .save(event)
+      .catch((e: QueryFailedError) => {
+        switch (+e.driverError.code) {
+          case 23502: // not_null_violation
+            throw new BadRequestException(
+              `Field '${e.driverError.column}' is required`,
+            );
+          default:
+            throw e;
+        }
+      });
+
+    delete persistedEvent.calendar.events;
+
+    return persistedEvent;
+  }
 
   @validateEntity
   async update(
