@@ -51,6 +51,7 @@ describe('CalendarService', () => {
       newEntity.alert = faker.number.int();
       newEntity.startDate = faker.date.future();
       newEntity.endDate = faker.date.future();
+      newEntity.visualEndDate = newEntity.endDate;
       newEntity.description = faker.lorem.paragraph();
       newEntity.color = faker.internet.color();
       newEntity.calendar = calendarList[i];
@@ -81,4 +82,6 @@ describe('CalendarService', () => {
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
+
+  // TODO: Service Tests
 });

@@ -28,8 +28,11 @@ export class EventEntity {
   @Column()
   startDate: Date;
 
-  @Column()
+  @Column({ select: false })
   endDate: Date;
+
+  @Column()
+  visualEndDate: Date;
 
   @Column({ nullable: true, select: false })
   description: string;

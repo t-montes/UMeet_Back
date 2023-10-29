@@ -106,7 +106,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"Ejercicio\",\r\n    \"location\": \"Gym\",\r\n    \"link\": \"\",\r\n    \"isPrivate\": false,\r\n    \"alert\": null,\r\n    \"startDate\": \"2023-10-28T07:30:00\",\r\n    \"endDate\": \"2023-10-28T08:00:00\",\r\n    \"color\":\"#D0ECE2\"\r\n}",
+					"raw": "{\r\n    \"name\": \"Ejercicio\",\r\n    \"location\": \"Gym\",\r\n    \"link\": \"\",\r\n    \"isPrivate\": false,\r\n    \"alert\": null,\r\n    \"startDate\": \"2023-10-28T07:30:00\",\r\n    \"endDate\": \"2023-10-28T07:45:00\",\r\n    \"color\":\"#D0ECE2\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -389,7 +389,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"startDate\": \"2023-10-28T08:30:00\",\r\n    \"endDate\": \"2023-10-28T09:00:00\",\r\n    \"color\":\"#000000\"\r\n}",
+					"raw": "{\r\n    \"startDate\": \"2023-10-28T08:30:00\",\r\n    \"endDate\": \"2023-10-28T08:40:00\",\r\n    \"color\":\"#000000\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
