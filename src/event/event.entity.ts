@@ -20,7 +20,7 @@ export class EventEntity {
   @Column()
   isPrivate: boolean;
 
-  @Column()
+  @Column({ nullable: true })
   alert: number;
 
   @Column()

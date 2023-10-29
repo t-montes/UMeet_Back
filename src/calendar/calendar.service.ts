@@ -79,7 +79,9 @@ export class CalendarService {
       .catch((e: QueryFailedError) => {
         switch (+e.driverError.code) {
           case 23502: // not_null_violation
-            throw new BadRequestException('All fields are required');
+            throw new BadRequestException(
+              `Field '${e.driverError.column}' is required`,
+            );
           default:
             throw e;
         }
