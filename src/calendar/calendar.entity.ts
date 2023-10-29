@@ -20,7 +20,7 @@ export class CalendarEntity {
   @IsHexColor()
   color: string;
 
-  @OneToOne(() => UserEntity, (user) => user.calendar)
+  @OneToOne(() => UserEntity, (user) => user.calendar, { onDelete: 'CASCADE' })
   @JoinColumn()
   user: UserEntity;
 

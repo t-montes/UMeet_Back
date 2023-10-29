@@ -83,7 +83,7 @@ export class UserService {
     if (!user)
       throw new BadRequestException('The user with the given id was not found');
 
-    await this.calendarRepository.remove(user.calendar);
+    //await this.calendarRepository.remove(user.calendar);
     await this.userRepository.remove(user);
   }
 }

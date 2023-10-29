@@ -36,6 +36,8 @@ export class EventEntity {
   @IsHexColor()
   color: string;
 
-  @ManyToOne(() => CalendarEntity, (calendar) => calendar.events)
+  @ManyToOne(() => CalendarEntity, (calendar) => calendar.events, {
+    onDelete: 'CASCADE',
+  })
   calendar: CalendarEntity;
 }
