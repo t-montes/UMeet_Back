@@ -8,6 +8,7 @@ import { Repository } from 'typeorm';
 import { CalendarEntity } from './calendar.entity';
 import { UserEntity } from '../user/user.entity';
 // import { GroupEntity } from '../group/group.entity';
+import { EventEntity } from '../event/event.entity';
 import { validateEntity } from '../shared/utils/validator';
 
 @Injectable()
@@ -17,11 +18,13 @@ export class CalendarService {
     private readonly calendarRepository: Repository<CalendarEntity>,
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>, // @InjectRepository(GroupEntity) // private readonly groupRepository: Repository<GroupEntity>,
+    @InjectRepository(EventEntity)
+    private readonly eventRepository: Repository<EventEntity>,
   ) {}
 
   // TODO: Get events from calendar
 
-  // TODO: Add event to calendar
+  // TODO: Create and add event to calendar
 
   @validateEntity
   async update(

@@ -3,17 +3,19 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   OneToOne,
+  OneToMany,
   JoinColumn,
 } from 'typeorm';
 import { IsHexColor } from 'class-validator';
 import { UserEntity } from '../user/user.entity';
+// import { GroupEntity } from '../group/group.entity';
+import { EventEntity } from '../event/event.entity';
 
 @Entity()
 export class CalendarEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  // color with a default value
   @Column({ default: '#ffffff' })
   @IsHexColor()
   color: string;
@@ -21,4 +23,11 @@ export class CalendarEntity {
   @OneToOne(() => UserEntity, (user) => user.calendar)
   @JoinColumn()
   user: UserEntity;
+
+  /* @OneToOne(() => GroupEntity, (group) => group.calendar)
+  @JoinColumn()
+  group: GroupEntity; */
+
+  @OneToMany(() => EventEntity, (event) => event.calendar)
+  events: EventEntity[];
 }
