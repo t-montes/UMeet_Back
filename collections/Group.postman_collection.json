@@ -1,0 +1,251 @@
+{
+	"info": {
+		"_postman_id": "4755cd64-9ff3-4035-8964-e601b37981f9",
+		"name": "Group",
+		"description": "- Group\n- User - Group (1..\\* - \\*)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14951485",
+		"_collection_link": "https://umeet-web.postman.co/workspace/UMeet-Back~2b3a45ca-5850-4a60-96d4-831af07e8ded/collection/30796580-4755cd64-9ff3-4035-8964-e601b37981f9?action=share&source=collection_link&creator=14951485"
+	},
+	"item": [
+		{
+			"name": "Create Group",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Grupo 1\",\r\n    \"topic\": \"Tema 1\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/groups",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"groups"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Create Group",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Grupo 1\",\r\n    \"topic\": \"Tema 1\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/groups",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"groups"
+							]
+						}
+					},
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\r\n    \"id\": \"1\",\r\n    \"name\": \"Grupo 1\",\r\n    \"topic\": \"Tema 1\"\r\n}\r\n\r\n"
+				}
+			]
+		},
+		{
+			"name": "Get Group",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": [
+				{
+					"name": "Get Group",
+					"originalRequest": {
+						"method": "GET",
+						"header": []
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				}
+			]
+		},
+		{
+			"name": "Edit Group",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Grupo 1 editado\",\r\n    \"topic\": \"Tema 1 editado\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/groups/{{group_id}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"groups",
+						"{{group_id}}"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Edit Group",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Grupo 1 editado\",\r\n    \"topic\": \"Tema 1 editado\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/groups/{{group_id}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"groups",
+								"{{group_id}}"
+							]
+						}
+					},
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\r\n    \"id\": \"1\",\r\n    \"name\": \"Grupo 1 editado\",\r\n    \"topic\": \"Tema 1 editado\"\r\n}"
+				}
+			]
+		},
+		{
+			"name": "Delete Group",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/groups/{{group_id}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"groups",
+						"{{group_id}}"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Delete Group",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/groups/{{group_id}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"groups",
+								"{{group_id}}"
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "group_id",
+			"value": "1"
+		},
+		{
+			"key": "wrong_group_id",
+			"value": "0"
+		}
+	]
+}

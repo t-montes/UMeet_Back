@@ -1,0 +1,385 @@
+{
+	"info": {
+		"_postman_id": "7319e942-c583-4973-836c-d9eb9676cab9",
+		"name": "User-Group",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14951485",
+		"_collection_link": "https://umeet-web.postman.co/workspace/UMeet-Back~2b3a45ca-5850-4a60-96d4-831af07e8ded/collection/30796580-7319e942-c583-4973-836c-d9eb9676cab9?action=share&source=collection_link&creator=14951485"
+	},
+	"item": [
+		{
+			"name": "Create a User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json()\r",
+							"pm.globals.set(\"user_id\", data.id);\r",
+							"\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"   pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Emilio\",\r\n    \"login\": \"emil.io\",\r\n    \"email\": \"emil.io@gmail.com\",\r\n    \"password\": \"Emilio01\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/users",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Create a User",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"8051e048-de13-4539-9db4-5e7847515493\",\r\n    \"name\": \"Emilio\",\r\n    \"login\": \"emil.io\",\r\n    \"email\": \"emil.io@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/users",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				}
+			]
+		},
+		{
+			"name": "Create Group",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"group_id\": \"{{group_id}}\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/groups/{{group_id}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"groups",
+						"{{group_id}}"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Create Group",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"test_name\",\r\n    \"topic\": \"test_topic\",\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/groups",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"groups"
+							]
+						}
+					},
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\r\n    \"name\": \"test_name\",\r\n    \"topic\": \"test_topic\",\r\n    \"group_id\": \"8051e048-de13-4539-9db4-5e7847515493\"\r\n}\r\n"
+				}
+			]
+		},
+		{
+			"name": "Add Member",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userId\": \"{{user_id}}\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/groups/{{group_id}}/members",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"groups",
+						"{{group_id}}",
+						"members"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Add Member",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\": \"{{user_id}}\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/groups/{{group_id}}/members",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"groups",
+								"{{group_id}}",
+								"members"
+							]
+						}
+					},
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Usuario añadido al grupo con éxito\",\n    \"data\": {\n        \"groupId\": \"1\",\n        \"userId\": \"uuid-9012\"\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "Get all Groups of an User",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response should be an array\", function () {\r",
+							"    const responseBody = pm.response.json();\r",
+							"    pm.expect(responseBody).to.be.an('array');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Each group should have required properties\", function () {\r",
+							"    const responseBody = pm.response.json();\r",
+							"    responseBody.forEach(group => {\r",
+							"        pm.expect(group).to.have.property('name');\r",
+							"        pm.expect(group).to.have.property('topic');\r",
+							"    });\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/users/{{user_id}}/groups",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"users",
+						"{{user_id}}",
+						"groups"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Get all Groups of an User",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/users/{{user_id}}/groups",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users",
+								"{{user_id}}",
+								"groups"
+							]
+						}
+					},
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "[\n    {\n        \"id\": \"f3d4e5g6-h7i8-j9k0-l1m2-n3o4p5q6r7\",\n        \"name\": \"Desarrolladores Frontend\",\n        \"topic\": \"Diseño y desarrollo de interfaces\"\n    },\n    {\n        \"id\": \"a1b2c3d4-e5f6-g7h8-i9j0-k1l2m3n4o5\",\n        \"name\": \"Amantes del Café\",\n        \"topic\": \"Discusión sobre los mejores cafés del mundo\"\n    }\n]"
+				}
+			]
+		},
+		{
+			"name": "Get all Groups of an User with wrong ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response should have error message\", function () {\r",
+							"    const responseBody = pm.response.json();\r",
+							"    pm.expect(responseBody).to.have.property('error');\r",
+							"    pm.expect(responseBody.error).to.eql('User not found');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/users/{{wrongUUID}}/groups",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"users",
+						"{{wrongUUID}}",
+						"groups"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Get all Groups of an User with wrong ID",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/users/{{wrongUUID}}/groups",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users",
+								"{{wrongUUID}}",
+								"groups"
+							]
+						}
+					},
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\r\n    \"status\": 404,\r\n    \"error\": \"Resource Not Found\",\r\n    \"message\": \"User not found.\"\r\n}\r\n"
+				}
+			]
+		}
+	]
+}

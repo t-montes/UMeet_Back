@@ -1,0 +1,525 @@
+{
+	"info": {
+		"_postman_id": "ca3773cc-5343-402d-938d-be4dcc8bf57a",
+		"name": "Group-Calendar",
+		"description": "- Group - Calendar (0..1 - 1)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14951485",
+		"_collection_link": "https://umeet-web.postman.co/workspace/UMeet-Back~2b3a45ca-5850-4a60-96d4-831af07e8ded/collection/30796580-ca3773cc-5343-402d-938d-be4dcc8bf57a?action=share&source=collection_link&creator=14951485"
+	},
+	"item": [
+		{
+			"name": "Create a User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json()\r",
+							"pm.globals.set(\"user_id\", data.id);\r",
+							"\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"   pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Emilio\",\r\n    \"login\": \"emil.io\",\r\n    \"email\": \"emil.io@gmail.com\",\r\n    \"password\": \"Emilio01\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/users",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Create a User",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"8051e048-de13-4539-9db4-5e7847515493\",\r\n    \"name\": \"Emilio\",\r\n    \"login\": \"emil.io\",\r\n    \"email\": \"emil.io@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/users",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				}
+			]
+		},
+		{
+			"name": "Create Group",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"group_id\": \"{{group_id}}\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/groups/{{group_id}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"groups",
+						"{{group_id}}"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Create Group",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"test_name\",\r\n    \"topic\": \"test_topic\",\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/groups",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"groups"
+							]
+						}
+					},
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\r\n    \"name\": \"test_name\",\r\n    \"topic\": \"test_topic\",\r\n    \"id\": \"8051e048-de13-4539-9db4-5e7847515493\"\r\n}\r\n"
+				}
+			]
+		},
+		{
+			"name": "Add Member",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userId\": \"{{user_id}}\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/groups/{{group_id}}/members",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"groups",
+						"{{group_id}}",
+						"members"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Add Member",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\": \"{{user_id}}\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/groups/{{group_id}}/members",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"groups",
+								"{{group_id}}",
+								"members"
+							]
+						}
+					},
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Usuario añadido al grupo con éxito\",\n    \"data\": {\n        \"id\": \"1\",\n        \"userId\": \"uuid-9012\"\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "Get Calendar of a Group",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/groups/{{group_id}}/calendar",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"groups",
+						"{{group_id}}",
+						"calendar"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Get Calendar of a Group",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/groups/{{group_id}}/calendar",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"groups",
+								"{{group_id}}",
+								"calendar"
+							]
+						}
+					},
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"data\": {\n        \"color\": \"red\",\n        \"events\": [\n            {\n                \"name\": \"Evento 1\",\n                \"location\": \"Lugar 1\",\n                \"startDate\": \"2023-11-01\",\n                \"endDate\": \"2023-11-01\"\n            },\n            {\n                \"name\": \"Evento 2\",\n                \"location\": \"Lugar 2\",\n                \"startDate\": \"2023-11-02\",\n                \"endDate\": \"2023-11-02\"\n            }\n        ]\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "Add Event to Group Calendar",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json()\r",
+							"pm.globals.set(\"event_id\", data.id);\r",
+							"\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Evento 3\",\r\n    \"location\": \"Lugar 3\",\r\n    \"startDate\": \"2023-11-03\",\r\n    \"endDate\": \"2023-11-03\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/groups/{{group_id}}/calendar/events",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"groups",
+						"{{group_id}}",
+						"calendar",
+						"events"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Add Event to Group Calendar",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Evento 3\",\r\n    \"location\": \"Lugar 3\",\r\n    \"startDate\": \"2023-11-03\",\r\n    \"endDate\": \"2023-11-03\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/groups/{{group_id}}/calendar/events",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"groups",
+								"{{group_id}}",
+								"calendar",
+								"events"
+							]
+						}
+					},
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Evento añadido al calendario con éxito\",\n    \"data\": {\n        \"eventId\": \"3\",\n        \"name\": \"Evento 3\",\n        \"location\": \"Lugar 3\",\n        \"startDate\": \"2023-11-03\",\n        \"endDate\": \"2023-11-03\"\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "Edit Event of a Group",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Evento Editado\",\r\n    \"location\": \"Lugar Editado\",\r\n    \"startDate\": \"2023-11-04\",\r\n    \"endDate\": \"2023-11-05\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/groups/{{group_id}}/calendar/events/{{event_id}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"groups",
+						"{{group_id}}",
+						"calendar",
+						"events",
+						"{{event_id}}"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Edit Event of a Group",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Evento Editado\",\r\n    \"location\": \"Lugar Editado\",\r\n    \"startDate\": \"2023-11-04\",\r\n    \"endDate\": \"2023-11-05\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/groups/{{group_id}}/calendar/events/{{event_id}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"groups",
+								"{{group_id}}",
+								"calendar",
+								"events",
+								"{{event_id}}"
+							]
+						}
+					},
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Evento actualizado con éxito\",\n    \"data\": {\n        \"id\": \"3\",\n        \"name\": \"Evento Editado\",\n        \"location\": \"Lugar Editado\",\n        \"startDate\": \"2023-11-04\",\n        \"endDate\": \"2023-11-05\"\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "Remove Event of a Group",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/groups/{{group_id}}/calendar/events/{{event_id}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"groups",
+						"{{group_id}}",
+						"calendar",
+						"events",
+						"{{event_id}}"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Remove Event of a Group",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/groups/{{group_id}}/calendar/events/{{event_id}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"groups",
+								"{{group_id}}",
+								"calendar",
+								"events",
+								"{{event_id}}"
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				}
+			]
+		}
+	]
+}
