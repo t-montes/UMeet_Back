@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 import { IsHexColor } from 'class-validator';
 import { UserEntity } from '../user/user.entity';
-// import { GroupEntity } from '../group/group.entity';
+import { GroupEntity } from '../group/group.entity';
 import { EventEntity } from '../event/event.entity';
 
 @Entity()
@@ -24,9 +24,9 @@ export class CalendarEntity {
   @JoinColumn()
   user: UserEntity;
 
-  /* @OneToOne(() => GroupEntity, (group) => group.calendar)
+  @OneToOne(() => GroupEntity, (group) => group.calendar)
   @JoinColumn()
-  group: GroupEntity; */
+  group: GroupEntity;
 
   @OneToMany(() => EventEntity, (event) => event.calendar)
   events: EventEntity[];

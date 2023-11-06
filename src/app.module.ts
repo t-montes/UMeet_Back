@@ -8,6 +8,7 @@ import { CalendarModule } from './calendar/calendar.module';
 import { CalendarEntity } from './calendar/calendar.entity';
 import { EventModule } from './event/event.module';
 import { EventEntity } from './event/event.entity';
+import { GroupModule } from './group/group.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { EventEntity } from './event/event.entity';
       synchronize: true,
       keepConnectionAlive: true,
     }),
+    GroupModule,
   ],
   controllers: [AppController],
   providers: [AppService],
