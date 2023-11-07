@@ -10,6 +10,7 @@ import { EventModule } from './event/event.module';
 import { EventEntity } from './event/event.entity';
 import { NotificationModule } from './notification/notification.module';
 import { NotificationEntity } from './notification/notification.entity';
+import { GroupModule } from './group/group.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { NotificationEntity } from './notification/notification.entity';
       synchronize: true,
       keepConnectionAlive: true,
     }),
+    GroupModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -4,11 +4,13 @@ import {
   PrimaryGeneratedColumn,
   OneToOne,
   Unique,
+  ManyToMany,
   OneToMany
 } from 'typeorm';
 import { IsEmail, Matches } from 'class-validator';
 import { CalendarEntity } from '../calendar/calendar.entity';
 import { NotificationEntity } from '../notification/notification.entity';
+import { GroupEntity } from '../group/group.entity';
 
 @Entity()
 @Unique('unique-login', ['login'])
@@ -40,4 +42,9 @@ export class UserEntity {
   @OneToMany(() => NotificationEntity, (notification) => notification.user)
   notifications: NotificationEntity[];
 
+  @OneToMany(() => GroupEntity, group => group.owner)
+  ownedGroups: GroupEntity[];
+
+  @ManyToMany(() => GroupEntity, group => group.members)
+  groups: GroupEntity[];
 }
