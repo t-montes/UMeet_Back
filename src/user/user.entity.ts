@@ -5,11 +5,13 @@ import {
   OneToOne,
   Unique,
   ManyToMany,
-  OneToMany
+  OneToMany,
+  JoinTable
 } from 'typeorm';
 import { IsEmail, Matches } from 'class-validator';
 import { CalendarEntity } from '../calendar/calendar.entity';
 import { NotificationEntity } from '../notification/notification.entity';
+import { SettingsEntity } from '../settings/settings.entity';
 import { GroupEntity } from '../group/group.entity';
 
 @Entity()
@@ -47,4 +49,11 @@ export class UserEntity {
 
   @ManyToMany(() => GroupEntity, group => group.members)
   groups: GroupEntity[];
+
+  @OneToOne(() => SettingsEntity, (settings) => settings.user)
+  settings: SettingsEntity;
+
+  @ManyToMany(() => UserEntity, user => user.friends)
+  @JoinTable()
+  friends: UserEntity[];
 }

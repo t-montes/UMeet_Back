@@ -12,6 +12,8 @@ import { NotificationModule } from './notification/notification.module';
 import { NotificationEntity } from './notification/notification.entity';
 import { GroupModule } from './group/group.module';
 import { GroupEntity } from './group/group.entity';
+import { SettingsModule } from './settings/settings.module';
+import { SettingsEntity } from './settings/settings.entity';
 
 @Module({
   imports: [
@@ -32,12 +34,14 @@ import { GroupEntity } from './group/group.entity';
         EventEntity,
         NotificationEntity,
         GroupEntity /* TODO: Add all entities */,
+        SettingsEntity
       ],
       dropSchema: true,
       synchronize: true,
       keepConnectionAlive: true,
     }),
     GroupModule,
+    SettingsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
