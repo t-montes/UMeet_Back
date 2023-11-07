@@ -11,6 +11,7 @@ import { EventEntity } from './event/event.entity';
 import { NotificationModule } from './notification/notification.module';
 import { NotificationEntity } from './notification/notification.entity';
 import { GroupModule } from './group/group.module';
+import { GroupEntity } from './group/group.entity';
 
 @Module({
   imports: [
@@ -29,7 +30,8 @@ import { GroupModule } from './group/group.module';
         UserEntity,
         CalendarEntity,
         EventEntity,
-        NotificationEntity /* TODO: Add all entities */,
+        NotificationEntity,
+        GroupEntity /* TODO: Add all entities */,
       ],
       dropSchema: true,
       synchronize: true,

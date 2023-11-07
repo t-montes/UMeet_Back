@@ -4,6 +4,7 @@ import { UserEntity } from '../../user/user.entity';
 import { CalendarEntity } from '../../calendar/calendar.entity';
 import { EventEntity } from '../../event/event.entity';
 import { NotificationEntity } from '../../notification/notification.entity';
+import { GroupEntity } from '../../group/group.entity';
 
 export const TypeOrmTestingConfig = () => [
   TypeOrmModule.forRoot({
@@ -14,7 +15,8 @@ export const TypeOrmTestingConfig = () => [
       UserEntity,
       CalendarEntity,
       EventEntity,
-      NotificationEntity /* TODO: Add all entities */,
+      NotificationEntity,
+      GroupEntity /* TODO: Add all entities */,
     ],
     synchronize: true,
     keepConnectionAlive: true,
@@ -23,6 +25,7 @@ export const TypeOrmTestingConfig = () => [
     UserEntity,
     CalendarEntity,
     EventEntity,
-    NotificationEntity /* TODO: Add all entities */,
+    NotificationEntity,
+    GroupEntity /* TODO: Add all entities */,
   ]),
 ];
