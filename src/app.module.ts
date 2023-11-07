@@ -8,12 +8,15 @@ import { CalendarModule } from './calendar/calendar.module';
 import { CalendarEntity } from './calendar/calendar.entity';
 import { EventModule } from './event/event.module';
 import { EventEntity } from './event/event.entity';
+import { NotificationModule } from './notification/notification.module';
+import { NotificationEntity } from './notification/notification.entity';
 
 @Module({
   imports: [
     UserModule,
     CalendarModule,
     EventModule,
+    NotificationModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
@@ -24,7 +27,8 @@ import { EventEntity } from './event/event.entity';
       entities: [
         UserEntity,
         CalendarEntity,
-        EventEntity /* TODO: Add all entities */,
+        EventEntity,
+        NotificationEntity /* TODO: Add all entities */,
       ],
       dropSchema: true,
       synchronize: true,
