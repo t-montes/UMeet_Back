@@ -7,7 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { QueryFailedError, Repository } from 'typeorm';
 import { CalendarEntity } from './calendar.entity';
 import { UserEntity } from '../user/user.entity';
-// import { GroupEntity } from '../group/group.entity';
+import { GroupEntity } from '../group/group.entity';
 import { EventEntity } from '../event/event.entity';
 import { validateEntity } from '../shared/utils';
 
@@ -17,13 +17,15 @@ export class CalendarService {
     @InjectRepository(CalendarEntity)
     private readonly calendarRepository: Repository<CalendarEntity>,
     @InjectRepository(UserEntity)
-    private readonly userRepository: Repository<UserEntity>, // @InjectRepository(GroupEntity) // private readonly groupRepository: Repository<GroupEntity>,
+    private readonly userRepository: Repository<UserEntity>, 
+    @InjectRepository(GroupEntity) 
+    private readonly groupRepository: Repository<GroupEntity>,
     @InjectRepository(EventEntity)
     private readonly eventRepository: Repository<EventEntity>,
   ) {}
 
   async getEvents(user: boolean, ownerId: string): Promise<CalendarEntity> {
-    let owner: UserEntity /* | GroupEntity */;
+    let owner: UserEntity | GroupEntity;
     if (user) {
       owner = await this.userRepository.findOne({
         where: { id: ownerId },
@@ -33,7 +35,7 @@ export class CalendarService {
         throw new BadRequestException(
           'The user with the given id was not found',
         );
-    } /* else {
+    } else {
       owner = await this.groupRepository.findOne({
         where: { id: ownerId },
         relations: ['calendar', 'calendar.events'],
@@ -42,7 +44,7 @@ export class CalendarService {
         throw new BadRequestException(
           'The group with the given id was not found',
         );
-    } */
+    }
 
     return owner.calendar;
   }
@@ -53,7 +55,7 @@ export class CalendarService {
     ownerId: string,
     event: EventEntity,
   ): Promise<EventEntity> {
-    let owner: UserEntity /* | GroupEntity */;
+    let owner: UserEntity | GroupEntity;
     if (user) {
       owner = await this.userRepository.findOne({
         where: { id: ownerId },
@@ -63,7 +65,7 @@ export class CalendarService {
         throw new BadRequestException(
           'The user with the given id was not found',
         );
-    } /* else {
+    } else {
       owner = await this.groupRepository.findOne({
         where: { id: ownerId },
         relations: ['calendar', 'calendar.events'],
@@ -72,7 +74,7 @@ export class CalendarService {
         throw new BadRequestException(
           'The group with the given id was not found',
         );
-    } */
+    }
 
     event.startDate = new Date(event.startDate);
     event.endDate = new Date(event.endDate);
@@ -124,7 +126,7 @@ export class CalendarService {
     ownerId: string,
     calendar: CalendarEntity,
   ): Promise<CalendarEntity> {
-    let owner: UserEntity /* | GroupEntity */;
+    let owner: UserEntity | GroupEntity;
     if (user) {
       owner = await this.userRepository.findOne({
         where: { id: ownerId },
@@ -134,7 +136,7 @@ export class CalendarService {
         throw new BadRequestException(
           'The user with the given id was not found',
         );
-    } /* else {
+    } else {
       owner = await this.groupRepository.findOne({
         where: { id: ownerId },
         relations: ['calendar'],
@@ -143,7 +145,7 @@ export class CalendarService {
         throw new BadRequestException(
           'The group with the given id was not found',
         );
-       */
+    }
     const persistedCalendar = await this.calendarRepository.findOne({
       where: { id: owner.calendar.id },
     });
