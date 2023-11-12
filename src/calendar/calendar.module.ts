@@ -10,7 +10,12 @@ import { EventEntity } from '../event/event.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([CalendarEntity, UserEntity, EventEntity, GroupEntity]),
+    TypeOrmModule.forFeature([
+      CalendarEntity,
+      UserEntity,
+      EventEntity,
+      GroupEntity,
+    ]),
   ],
   providers: [CalendarService],
   controllers: [UserCalendarController, GroupCalendarController],

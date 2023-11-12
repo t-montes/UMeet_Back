@@ -6,7 +6,7 @@ import {
   Unique,
   ManyToMany,
   OneToMany,
-  JoinTable
+  JoinTable,
 } from 'typeorm';
 import { IsEmail, Matches } from 'class-validator';
 import { CalendarEntity } from '../calendar/calendar.entity';
@@ -44,16 +44,16 @@ export class UserEntity {
   @OneToMany(() => NotificationEntity, (notification) => notification.user)
   notifications: NotificationEntity[];
 
-  @OneToMany(() => GroupEntity, group => group.owner)
+  @OneToMany(() => GroupEntity, (group) => group.owner)
   ownedGroups: GroupEntity[];
 
-  @ManyToMany(() => GroupEntity, group => group.members)
+  @ManyToMany(() => GroupEntity, (group) => group.members)
   groups: GroupEntity[];
 
   @OneToOne(() => SettingsEntity, (settings) => settings.user)
   settings: SettingsEntity;
 
-  @ManyToMany(() => UserEntity, user => user.friends)
+  @ManyToMany(() => UserEntity, (user) => user.friends)
   @JoinTable()
   friends: UserEntity[];
 }

@@ -18,7 +18,7 @@ export const TypeOrmTestingConfig = () => [
       EventEntity,
       NotificationEntity,
       GroupEntity /* TODO: Add all entities */,
-      SettingsEntity
+      SettingsEntity,
     ],
     synchronize: true,
     keepConnectionAlive: true,
@@ -29,6 +29,6 @@ export const TypeOrmTestingConfig = () => [
     EventEntity,
     NotificationEntity,
     GroupEntity /* TODO: Add all entities */,
-    SettingsEntity
+    SettingsEntity,
   ]),
 ];

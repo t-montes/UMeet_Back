@@ -34,7 +34,7 @@ import { SettingsEntity } from './settings/settings.entity';
         EventEntity,
         NotificationEntity,
         GroupEntity /* TODO: Add all entities */,
-        SettingsEntity
+        SettingsEntity,
       ],
       dropSchema: true,
       synchronize: true,

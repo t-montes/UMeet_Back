@@ -17,8 +17,8 @@ export class CalendarService {
     @InjectRepository(CalendarEntity)
     private readonly calendarRepository: Repository<CalendarEntity>,
     @InjectRepository(UserEntity)
-    private readonly userRepository: Repository<UserEntity>, 
-    @InjectRepository(GroupEntity) 
+    private readonly userRepository: Repository<UserEntity>,
+    @InjectRepository(GroupEntity)
     private readonly groupRepository: Repository<GroupEntity>,
     @InjectRepository(EventEntity)
     private readonly eventRepository: Repository<EventEntity>,

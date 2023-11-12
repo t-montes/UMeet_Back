@@ -1,29 +1,24 @@
-import {
-    Column,
-    Entity,
-    PrimaryGeneratedColumn,
-    OneToOne
-  } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
 
 import { UserEntity } from '../user/user.entity';
 
 @Entity()
 export class SettingsEntity {
-    @PrimaryGeneratedColumn('uuid')
-    id: string;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-    @Column()
-    startHour: number;
+  @Column()
+  startHour: number;
 
-    @Column()
-    endHour: number;
+  @Column()
+  endHour: number;
 
-    @Column()
-    lastLaborDay: number;
+  @Column()
+  lastLaborDay: number;
 
-    @Column()
-    enableGrid: boolean;
+  @Column()
+  enableGrid: boolean;
 
-    @OneToOne(() => UserEntity, (user) => user.settings)
-    user: UserEntity;
+  @OneToOne(() => UserEntity, (user) => user.settings)
+  user: UserEntity;
 }

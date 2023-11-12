@@ -94,7 +94,7 @@ describe('GroupService', () => {
   });
 
   it('update should throw an exception for an invalid group', async () => {
-    let group: GroupEntity = new GroupEntity();
+    const group: GroupEntity = new GroupEntity();
     group.id = '0';
     group.name = faker.commerce.productName();
     group.topic = faker.company.bs();
