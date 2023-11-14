@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { GroupEntity } from './group.entity'; // Asumiendo que tienes una entidad definida para GroupEntity
+import { GroupEntity } from './group.entity';
 import {
   BusinessError,
   BusinessLogicException,
@@ -16,14 +16,14 @@ export class GroupService {
 
   async findAll(): Promise<GroupEntity[]> {
     return await this.groupRepository.find({
-      relations: ['members', 'events'],
+      relations: ['members', 'calendar', 'owner'],
     });
   }
 
   async findOne(id: string): Promise<GroupEntity> {
     const group: GroupEntity = await this.groupRepository.findOne({
       where: { id },
-      relations: ['members', 'events'],
+      relations: ['members', 'calendar', 'owner'],
     });
     if (!group)
       throw new BusinessLogicException(

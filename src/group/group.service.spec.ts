@@ -17,7 +17,7 @@ describe('GroupService', () => {
     for (let i = 0; i < 5; i++) {
       const group = new GroupEntity();
       group.name = faker.commerce.productName();
-      group.topic = faker.company.bs();
+      group.topic = faker.company.buzzPhrase();
       const savedGroup: GroupEntity = await groupRepository.save(group);
       groupList.push(savedGroup);
     }
@@ -64,7 +64,7 @@ describe('GroupService', () => {
   it('create should return a new group', async () => {
     const group: GroupEntity = new GroupEntity();
     group.name = faker.commerce.productName();
-    group.topic = faker.company.bs();
+    group.topic = faker.company.buzzPhrase();
 
     const newGroup: GroupEntity = await service.create(group);
     expect(newGroup).not.toBeNull();
@@ -80,7 +80,7 @@ describe('GroupService', () => {
   it('update should modify a group', async () => {
     const group: GroupEntity = groupList[0];
     group.name = faker.commerce.productName();
-    group.topic = faker.company.bs();
+    group.topic = faker.company.buzzPhrase();
 
     const updatedGroup: GroupEntity = await service.update(group.id, group);
     expect(updatedGroup).not.toBeNull();
@@ -97,7 +97,7 @@ describe('GroupService', () => {
     const group: GroupEntity = new GroupEntity();
     group.id = '0';
     group.name = faker.commerce.productName();
-    group.topic = faker.company.bs();
+    group.topic = faker.company.buzzPhrase();
 
     await expect(() => service.update(group.id, group)).rejects.toHaveProperty(
       'message',
