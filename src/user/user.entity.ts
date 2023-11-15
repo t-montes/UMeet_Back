@@ -7,6 +7,7 @@ import {
   ManyToMany,
   OneToMany,
   JoinTable,
+  JoinColumn,
 } from 'typeorm';
 import { IsEmail, Matches } from 'class-validator';
 import { CalendarEntity } from '../calendar/calendar.entity';
@@ -51,6 +52,7 @@ export class UserEntity {
   groups: GroupEntity[];
 
   @OneToOne(() => SettingsEntity, (settings) => settings.user)
+  @JoinColumn()
   settings: SettingsEntity;
 
   @ManyToMany(() => UserEntity, (user) => user.friends)

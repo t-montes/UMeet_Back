@@ -42,13 +42,11 @@ describe('NotificationService', () => {
       newNotification.text = faker.lorem.word();
       newNotification.date = faker.date.future();
       newNotification.redirection = faker.internet.url();
-      // Assign the User to the Notification
       newNotification.user = user; 
       const notification = await notificationRepository.save(newNotification);
       notificationList.push(notification);
     }
   };
-  
 
   it('should find all notifications', async () => {
     const notifications = await service.findAll();
@@ -63,18 +61,25 @@ describe('NotificationService', () => {
     expect(found.id).toEqual(notification.id);
   });
 
-  it('should create a new notification', async () => {
-    const newNotification: NotificationEntity = {
-      id: undefined,
-      text: 'New notification text',
-      date: new Date(),
-      redirection: faker.internet.url(),
-      user: user,
-    };
+  it('create should return a new notification', async () => {
+    const notification: NotificationEntity = new NotificationEntity();
+    notification.text = faker.lorem.word();
+    notification.date = faker.date.future();
+    notification.redirection = faker.internet.url();
+    notification.user = user;
 
-    const createdNotification = await service.create(newNotification);
-    expect(createdNotification).not.toBeNull();
-    expect(createdNotification.text).toEqual(newNotification.text);
+    const newNotification: NotificationEntity = await service.create(notification);
+    expect(newNotification).not.toBeNull();
+
+    const storedNotification: NotificationEntity = await notificationRepository.findOne({
+      where: { id: newNotification.id },
+    });
+    expect(storedNotification).not.toBeNull();
+
+    expect(newNotification.text).toEqual(notification.text);
+    expect(newNotification.date).toEqual(notification.date);
+    expect(newNotification.redirection).toEqual(notification.redirection);
+  
   });
 
   it('should update a notification', async () => {
