@@ -140,4 +140,56 @@ describe('UserService', () => {
       'The user with the given id was not found',
     );
   });
+
+  it('addFriend should add a friend to the user', async () => {
+    const user1: UserEntity = usersList[0];
+    const user2: UserEntity = usersList[1];
+
+    await service.addFriend(user1.id, user2.id);
+
+    const updatedUser1: UserEntity = await userRepository.findOne({
+      where: { id: user1.id },
+      relations: ['friends'],
+    });
+
+    expect(updatedUser1.friends).toHaveLength(1);
+    expect(updatedUser1.friends[0].id).toEqual(user2.id);
+  });
+
+  it('addFriend should not add a duplicate friend', async () => {
+    const user1: UserEntity = usersList[0];
+    const user2: UserEntity = usersList[1];
+
+    await service.addFriend(user1.id, user2.id);
+    
+    await expect(service.addFriend(user1.id, user2.id)).rejects.toHaveProperty(
+      'message',
+      'The users are already friends',
+    );
+  });
+
+  it('removeFriend should remove a friend from the user', async () => {
+    const user1: UserEntity = usersList[0];
+    const user2: UserEntity = usersList[1];
+
+    await service.addFriend(user1.id, user2.id);
+    await service.removeFriend(user1.id, user2.id);
+
+    const updatedUser1: UserEntity = await userRepository.findOne({
+      where: { id: user1.id },
+      relations: ['friends'],
+    });
+
+    expect(updatedUser1.friends).toHaveLength(0);
+  });
+
+  it('removeFriend should not remove a non-existent friend', async () => {
+    const user1: UserEntity = usersList[0];
+    const user2: UserEntity = usersList[4]; // Assume user2 is not a friend of user1
+  
+    await expect(service.removeFriend(user1.id, user2.id)).rejects.toHaveProperty(
+      'message',
+      'Friend not found',
+    );
+  });
 });

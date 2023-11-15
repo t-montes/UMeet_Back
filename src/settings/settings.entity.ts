@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
 
 import { UserEntity } from '../user/user.entity';
 
@@ -20,5 +20,6 @@ export class SettingsEntity {
   enableGrid: boolean;
 
   @OneToOne(() => UserEntity, (user) => user.settings)
+  @JoinColumn()
   user: UserEntity;
 }

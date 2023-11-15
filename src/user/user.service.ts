@@ -103,4 +103,57 @@ export class UserService {
 
     await this.userRepository.remove(user);
   }
+
+  async addFriend(userId: string, friendId: string): Promise<UserEntity> {
+    if (userId === friendId) {
+      throw new BadRequestException('Users cannot befriend themselves');
+    }
+
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+      relations: ['friends'],
+    });
+    const friend = await this.userRepository.findOne({ where: { id: friendId } });
+
+    if (!user || !friend) {
+      throw new BadRequestException('One or both users not found');
+    }
+
+    if (user.friends.some(f => f.id === friendId)) {
+      throw new BadRequestException('The users are already friends');
+    }
+
+    user.friends.push(friend);
+    await this.userRepository.save(user).catch((e: QueryFailedError) => {
+      // Handle potential query errors here
+      throw new BadRequestException('Failed to add friend');
+    });
+
+    return user;
+  }
+
+  async removeFriend(userId: string, friendId: string): Promise<UserEntity> {
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+      relations: ['friends'],
+    });
+  
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
+  
+    const friendIndex = user.friends.findIndex(friend => friend.id === friendId);
+    if (friendIndex === -1) {
+      throw new BadRequestException('Friend not found');
+    }
+  
+    user.friends.splice(friendIndex, 1);
+    await this.userRepository.save(user).catch((e: QueryFailedError) => {
+      // Handle potential query errors here
+      throw new BadRequestException('Failed to remove friend');
+    });
+  
+    return user;
+  }
+
 }
