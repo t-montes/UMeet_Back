@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { SettingsEntity } from './settings.entity';
 import { UserEntity } from '../user/user.entity';
-import { validateEntity } from '../shared/utils';
 
 @Injectable()
 export class SettingsService {
