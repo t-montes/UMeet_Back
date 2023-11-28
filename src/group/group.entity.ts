@@ -31,6 +31,5 @@ export class GroupEntity {
   owner: UserEntity;
 
   @OneToOne(() => CalendarEntity, (calendar) => calendar.group)
-  @JoinColumn()
   calendar: CalendarEntity;
 }

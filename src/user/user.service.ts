@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { QueryFailedError, Repository } from 'typeorm';
 import { UserEntity } from './user.entity';
 import { CalendarEntity } from '../calendar/calendar.entity';
+import { SettingsEntity } from '../settings/settings.entity';
 import { validateEntity } from '../shared/utils';
 
 @Injectable()
@@ -12,6 +13,8 @@ export class UserService {
     private readonly userRepository: Repository<UserEntity>,
     @InjectRepository(CalendarEntity)
     private readonly calendarRepository: Repository<CalendarEntity>,
+    @InjectRepository(SettingsEntity)
+    private readonly settingsRepository: Repository<SettingsEntity>,
   ) {}
 
   async findAll(): Promise<UserEntity[]> {
@@ -21,7 +24,7 @@ export class UserService {
   async findOne(id: string): Promise<UserEntity> {
     const user: UserEntity = await this.userRepository.findOne({
       where: { id },
-      relations: ['calendar' /*, 'friends', 'groups' */],
+      relations: ['calendar', 'settings' /*, 'friends', 'groups' */],
     });
     if (!user)
       throw new BadRequestException('The user with the given id was not found');
@@ -34,6 +37,10 @@ export class UserService {
       new CalendarEntity(),
     );
     user.calendar = calendar;
+    const settings: SettingsEntity = await this.settingsRepository.save(
+      new SettingsEntity(),
+    );
+    user.settings = settings;
 
     const persistedUser = await this.userRepository
       .save(user)
@@ -88,6 +95,7 @@ export class UserService {
             throw e;
         }
       });
+
     delete updatedUser.password;
     return updatedUser;
   }
@@ -113,21 +121,20 @@ export class UserService {
       where: { id: userId },
       relations: ['friends'],
     });
-    const friend = await this.userRepository.findOne({ where: { id: friendId } });
+    const friend = await this.userRepository.findOne({
+      where: { id: friendId },
+    });
 
     if (!user || !friend) {
       throw new BadRequestException('One or both users not found');
     }
 
-    if (user.friends.some(f => f.id === friendId)) {
+    if (user.friends.some((f) => f.id === friendId)) {
       throw new BadRequestException('The users are already friends');
     }
 
     user.friends.push(friend);
-    await this.userRepository.save(user).catch((e: QueryFailedError) => {
-      // Handle potential query errors here
-      throw new BadRequestException('Failed to add friend');
-    });
+    await this.userRepository.save(user);
 
     return user;
   }
@@ -137,23 +144,21 @@ export class UserService {
       where: { id: userId },
       relations: ['friends'],
     });
-  
+
     if (!user) {
       throw new BadRequestException('User not found');
     }
-  
-    const friendIndex = user.friends.findIndex(friend => friend.id === friendId);
+
+    const friendIndex = user.friends.findIndex(
+      (friend) => friend.id === friendId,
+    );
     if (friendIndex === -1) {
       throw new BadRequestException('Friend not found');
     }
-  
+
     user.friends.splice(friendIndex, 1);
-    await this.userRepository.save(user).catch((e: QueryFailedError) => {
-      // Handle potential query errors here
-      throw new BadRequestException('Failed to remove friend');
-    });
-  
+    await this.userRepository.save(user);
+
     return user;
   }
-
 }

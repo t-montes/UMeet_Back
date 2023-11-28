@@ -161,7 +161,7 @@ describe('UserService', () => {
     const user2: UserEntity = usersList[1];
 
     await service.addFriend(user1.id, user2.id);
-    
+
     await expect(service.addFriend(user1.id, user2.id)).rejects.toHaveProperty(
       'message',
       'The users are already friends',
@@ -186,10 +186,9 @@ describe('UserService', () => {
   it('removeFriend should not remove a non-existent friend', async () => {
     const user1: UserEntity = usersList[0];
     const user2: UserEntity = usersList[4]; // Assume user2 is not a friend of user1
-  
-    await expect(service.removeFriend(user1.id, user2.id)).rejects.toHaveProperty(
-      'message',
-      'Friend not found',
-    );
+
+    await expect(
+      service.removeFriend(user1.id, user2.id),
+    ).rejects.toHaveProperty('message', 'Friend not found');
   });
 });

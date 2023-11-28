@@ -21,8 +21,12 @@ describe('NotificationService', () => {
     }).compile();
 
     service = module.get<NotificationService>(NotificationService);
-    notificationRepository = module.get<Repository<NotificationEntity>>(getRepositoryToken(NotificationEntity));
-    userRepository = module.get<Repository<UserEntity>>(getRepositoryToken(UserEntity));
+    notificationRepository = module.get<Repository<NotificationEntity>>(
+      getRepositoryToken(NotificationEntity),
+    );
+    userRepository = module.get<Repository<UserEntity>>(
+      getRepositoryToken(UserEntity),
+    );
     await seedDatabase();
   });
 
@@ -34,7 +38,7 @@ describe('NotificationService', () => {
     newUser.email = faker.lorem.word();
     newUser.name = faker.lorem.word();
     user = await userRepository.save(newUser);
-  
+
     await notificationRepository.clear();
     notificationList = [];
     for (let i = 0; i < 5; i++) {
@@ -42,7 +46,7 @@ describe('NotificationService', () => {
       newNotification.text = faker.lorem.word();
       newNotification.date = faker.date.future();
       newNotification.redirection = faker.internet.url();
-      newNotification.user = user; 
+      newNotification.user = user;
       const notification = await notificationRepository.save(newNotification);
       notificationList.push(notification);
     }
@@ -68,18 +72,20 @@ describe('NotificationService', () => {
     notification.redirection = faker.internet.url();
     notification.user = user;
 
-    const newNotification: NotificationEntity = await service.create(notification);
+    const newNotification: NotificationEntity = await service.create(
+      notification,
+    );
     expect(newNotification).not.toBeNull();
 
-    const storedNotification: NotificationEntity = await notificationRepository.findOne({
-      where: { id: newNotification.id },
-    });
+    const storedNotification: NotificationEntity =
+      await notificationRepository.findOne({
+        where: { id: newNotification.id },
+      });
     expect(storedNotification).not.toBeNull();
 
     expect(newNotification.text).toEqual(notification.text);
     expect(newNotification.date).toEqual(notification.date);
     expect(newNotification.redirection).toEqual(notification.redirection);
-  
   });
 
   it('should update a notification', async () => {
@@ -97,11 +103,11 @@ describe('NotificationService', () => {
 
   it('should delete a notification', async () => {
     const notification = notificationList[0];
-  
+
     await service.delete(notification.id);
-  
+
     const deletedNotification = await notificationRepository.findOne({
-      where: { id: notification.id }
+      where: { id: notification.id },
     });
     expect(deletedNotification).toBeNull();
   });

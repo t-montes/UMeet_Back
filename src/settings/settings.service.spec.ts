@@ -31,22 +31,21 @@ describe('SettingsService', () => {
   });
 
   const seedDatabase = async () => {
-
     await userRepository.clear();
     const newUser = new UserEntity();
     newUser.name = faker.person.fullName();
     newUser.login = faker.internet.userName();
     newUser.email = faker.internet.email();
     newUser.password = faker.internet.password({ prefix: 'Pw0' });
-    const user: UserEntity = await userRepository.save(newUser);
-  
+    user = await userRepository.save(newUser);
+
     await settingsRepository.clear();
+    settingsList = [];
     const newSettings = new SettingsEntity();
     newSettings.startHour = faker.number.int();
     newSettings.endHour = faker.number.int();
     newSettings.lastLaborDay = faker.number.int();
     newSettings.enableGrid = faker.datatype.boolean();
-    newSettings.user = user; 
     const settings: SettingsEntity = await settingsRepository.save(newSettings);
     settingsList.push(settings);
   };
@@ -59,7 +58,6 @@ describe('SettingsService', () => {
 
   it('findOne should return a setting by id', async () => {
     const storedSettings: SettingsEntity = settingsList[0];
-    console.log("Prueba findOne - ID de settings:", storedSettings.id);
     const settings: SettingsEntity = await service.findOne(storedSettings.id);
     expect(settings).not.toBeNull();
     expect(settings.startHour).toEqual(storedSettings.startHour);
@@ -76,7 +74,9 @@ describe('SettingsService', () => {
   });
 
   it('findOne should throw an exception for an invalid settings', async () => {
-    await expect(() => service.findOne('0')).rejects.toHaveProperty(
+    await expect(() =>
+      service.findOne('00000000-0000-0000-0000-000000000000'),
+    ).rejects.toHaveProperty(
       'message',
       'The settings with the given id was not found',
     );
@@ -100,7 +100,6 @@ describe('SettingsService', () => {
     expect(storedSettings.endHour).toEqual(newSettings.endHour);
     expect(storedSettings.lastLaborDay).toEqual(newSettings.lastLaborDay);
     expect(storedSettings.enableGrid).toEqual(newSettings.enableGrid);
-
   });
 
   it('should create a new settings', async () => {
