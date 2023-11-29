@@ -33,40 +33,41 @@ export class UserService {
 
   @validateEntity
   async create(user: UserEntity): Promise<UserEntity> {
-    const calendar: CalendarEntity = await this.calendarRepository.save(
-      new CalendarEntity(),
-    );
-    user.calendar = calendar;
-    const settings: SettingsEntity = await this.settingsRepository.save(
-      new SettingsEntity(),
-    );
-    user.settings = settings;
-
-    const persistedUser = await this.userRepository
-      .save(user)
-      .catch((e: QueryFailedError) => {
-        switch (+e.driverError.code) {
-          case 23505: // unique_violation
-            switch (e.driverError.constraint) {
-              case 'unique-login':
-                throw new BadRequestException('The login is already in use');
-              case 'unique-email':
-                throw new BadRequestException('The email is already in use');
-              default:
-                throw e;
+    try {
+        const calendar: CalendarEntity = await this.calendarRepository.save(
+            new CalendarEntity(),
+        );
+        user.calendar = calendar;
+        const defaultSettings = new SettingsEntity();
+        const settings: SettingsEntity = await this.settingsRepository.save(defaultSettings);
+        user.settings = settings;
+        const persistedUser = await this.userRepository.save(user);
+        delete persistedUser.password;
+        return persistedUser;
+    } catch (e: any) {
+        if (e instanceof QueryFailedError) {
+            switch (+e.driverError.code) {
+                case 23505:
+                    switch (e.driverError.constraint) {
+                        case 'unique-login':
+                            throw new BadRequestException('The login is already in use');
+                        case 'unique-email':
+                            throw new BadRequestException('The email is already in use');
+                        default:
+                            throw e;
+                    }
+                case 23502:
+                    throw new BadRequestException(
+                        `Field '${e.driverError.column}' is required`,
+                    );
+                default:
+                    throw e;
             }
-          case 23502: // not_null_violation
-            throw new BadRequestException(
-              `Field '${e.driverError.column}' is required`,
-            );
-          default:
-            throw e;
+        } else {
+            throw new BadRequestException(e.message);
         }
-      });
-
-    delete persistedUser.password;
-    return persistedUser;
-  }
+    }
+}
 
   @validateEntity
   async update(id: string, user: UserEntity): Promise<UserEntity> {

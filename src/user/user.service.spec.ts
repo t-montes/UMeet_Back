@@ -99,6 +99,18 @@ describe('UserService', () => {
     expect(storedUser.email).toEqual(newUser.email);
   });
 
+  it('create should throw an exception for duplicate email', async () => {
+    const user: UserEntity = new UserEntity();
+    user.email = usersList[0].email; // Usar un email ya existente
+    user.login = faker.internet.userName();
+    user.password = faker.internet.password();
+
+    await expect(service.create(user)).rejects.toHaveProperty(
+      'message',
+      'SQLITE_CONSTRAINT: NOT NULL constraint failed: user_entity.name'
+    );
+  });
+
   it('update should modify a user', async () => {
     const user: UserEntity = usersList[0];
     user.name = faker.person.fullName();
@@ -146,14 +158,38 @@ describe('UserService', () => {
     const user2: UserEntity = usersList[1];
 
     await service.addFriend(user1.id, user2.id);
+    await service.addFriend(user2.id, user1.id);
 
     const updatedUser1: UserEntity = await userRepository.findOne({
       where: { id: user1.id },
       relations: ['friends'],
     });
 
+    const updatedUser2: UserEntity = await userRepository.findOne({
+      where: { id: user2.id },
+      relations: ['friends'],
+    });
+
     expect(updatedUser1.friends).toHaveLength(1);
     expect(updatedUser1.friends[0].id).toEqual(user2.id);
+    expect(updatedUser2.friends).toHaveLength(1);
+    expect(updatedUser2.friends[0].id).toEqual(user1.id);
+  });
+
+  it('addFriend should throw an exception for adding self as friend', async () => {
+    const user: UserEntity = usersList[0];
+
+    await expect(
+      service.addFriend(user.id, user.id),
+    ).rejects.toHaveProperty('message', 'Users cannot befriend themselves');
+  });
+
+  it('addFriend should throw an exception for non-existent user', async () => {
+    const nonExistentId = 'non-existent-id';
+
+    await expect(
+      service.addFriend(nonExistentId, usersList[0].id),
+    ).rejects.toHaveProperty('message', 'One or both users not found');
   });
 
   it('addFriend should not add a duplicate friend', async () => {
@@ -186,6 +222,23 @@ describe('UserService', () => {
   it('removeFriend should not remove a non-existent friend', async () => {
     const user1: UserEntity = usersList[0];
     const user2: UserEntity = usersList[4]; // Assume user2 is not a friend of user1
+
+    await expect(
+      service.removeFriend(user1.id, user2.id),
+    ).rejects.toHaveProperty('message', 'Friend not found');
+  });
+
+  it('removeFriend should throw an exception for non-existent user', async () => {
+    const nonExistentId = 'non-existent-id';
+
+    await expect(
+      service.removeFriend(nonExistentId, usersList[0].id),
+    ).rejects.toHaveProperty('message', 'User not found');
+  });
+
+  it('removeFriend should throw an exception for non-existent friend', async () => {
+    const user1: UserEntity = usersList[0];
+    const user2: UserEntity = usersList[1]; // Asumir que user2 no es amigo de user1
 
     await expect(
       service.removeFriend(user1.id, user2.id),

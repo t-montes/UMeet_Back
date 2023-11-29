@@ -65,6 +65,15 @@ describe('NotificationService', () => {
     expect(found.id).toEqual(notification.id);
   });
 
+  it('findOne should throw an exception for an invalid notification id', async () => {
+    await expect(() => 
+      service.findOne('invalid-id')
+    ).rejects.toHaveProperty(
+      'message', 
+      'The notification with the given id was not found'
+    );
+  });
+
   it('create should return a new notification', async () => {
     const notification: NotificationEntity = new NotificationEntity();
     notification.text = faker.lorem.word();
@@ -101,6 +110,18 @@ describe('NotificationService', () => {
     expect(updated.text).toEqual(updatedText);
   });
 
+  it('update should throw an exception for an invalid notification id', async () => {
+    const invalidNotification = new NotificationEntity();
+    invalidNotification.text = 'Invalid';
+
+    await expect(() => 
+      service.update('invalid-id', invalidNotification)
+    ).rejects.toHaveProperty(
+      'message', 
+      'The notification with the given id was not found'
+    );
+  });
+
   it('should delete a notification', async () => {
     const notification = notificationList[0];
 
@@ -111,4 +132,14 @@ describe('NotificationService', () => {
     });
     expect(deletedNotification).toBeNull();
   });
+
+  it('delete should throw an exception for an invalid notification id', async () => {
+    await expect(() => 
+      service.delete('invalid-id')
+    ).rejects.toHaveProperty(
+      'message', 
+      'The notification with the given id was not found'
+    );
+  });
+
 });

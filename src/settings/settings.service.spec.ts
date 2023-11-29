@@ -130,6 +130,33 @@ describe('SettingsService', () => {
     expect(updated.startHour).toEqual(updatedStartHour);
   });
 
+  it('update should throw an exception for an invalid setting id', async () => {
+    const invalidId = '00000000-0000-0000-0000-000000000000';
+    const updateData = new SettingsEntity();
+    updateData.startHour = faker.number.int();
+    updateData.endHour = faker.number.int();
+    updateData.lastLaborDay = faker.number.int();
+    updateData.enableGrid = faker.datatype.boolean();
+
+    await expect(() =>
+      service.update(invalidId, updateData),
+    ).rejects.toHaveProperty(
+      'message',
+      'The settings with the given id was not found',
+    );
+  });
+
+  it('delete should throw an exception for an invalid setting id', async () => {
+    const invalidId = '00000000-0000-0000-0000-000000000000';
+
+    await expect(() =>
+      service.delete(invalidId),
+    ).rejects.toHaveProperty(
+      'message',
+      'The settings with the given id was not found',
+    );
+  });
+
   it('delete should remove a setting', async () => {
     const storedSettings: SettingsEntity = settingsList[0];
     await service.delete(storedSettings.id);
