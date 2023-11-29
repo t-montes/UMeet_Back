@@ -52,7 +52,6 @@ export class UserEntity {
   groups: GroupEntity[];
 
   @OneToOne(() => SettingsEntity, (settings) => settings.user)
-  @JoinColumn()
   settings: SettingsEntity;
 
   @ManyToMany(() => UserEntity, (user) => user.friends)

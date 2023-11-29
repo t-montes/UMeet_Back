@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
 import { UserEntity } from '../user/user.entity';
 
 @Entity()
@@ -18,6 +18,7 @@ export class SettingsEntity {
   @Column({ default: true })
   enableGrid: boolean;
 
-  @OneToOne(() => UserEntity, (user) => user.settings)
+  @OneToOne(() => UserEntity, (user) => user.calendar, { onDelete: 'CASCADE' })
+  @JoinColumn()
   user: UserEntity;
 }

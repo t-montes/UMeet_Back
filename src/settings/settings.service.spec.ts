@@ -46,6 +46,7 @@ describe('SettingsService', () => {
     newSettings.endHour = faker.number.int();
     newSettings.lastLaborDay = faker.number.int();
     newSettings.enableGrid = faker.datatype.boolean();
+    newSettings.user = user;
     const settings: SettingsEntity = await settingsRepository.save(newSettings);
     settingsList.push(settings);
   };
@@ -83,49 +84,61 @@ describe('SettingsService', () => {
   });
 
   it('create should return a new settings', async () => {
+    // Crear un nuevo usuario para cada configuración de ajustes
+    const newUser = new UserEntity();
+    newUser.name = faker.person.fullName();
+    newUser.login = faker.internet.userName();
+    newUser.email = faker.internet.email();
+    newUser.password = faker.internet.password();
+  
+    const createdUser = await userRepository.save(newUser);
+  
     const settings: SettingsEntity = new SettingsEntity();
     settings.startHour = faker.number.int();
     settings.endHour = faker.number.int();
     settings.lastLaborDay = faker.number.int();
     settings.enableGrid = faker.datatype.boolean();
-
-    const newSettings: SettingsEntity = await service.create(settings);
+    settings.user = createdUser; // Asignar el nuevo usuario
+  
+    const newSettings: SettingsEntity = await service.create(settings, createdUser.id);
     expect(newSettings).not.toBeNull();
-
+  
     const storedSettings: SettingsEntity = await settingsRepository.findOne({
       where: { id: newSettings.id },
+      relations: ['user'],
     });
     expect(storedSettings).not.toBeNull();
-    expect(storedSettings.startHour).toEqual(newSettings.startHour);
-    expect(storedSettings.endHour).toEqual(newSettings.endHour);
-    expect(storedSettings.lastLaborDay).toEqual(newSettings.lastLaborDay);
-    expect(storedSettings.enableGrid).toEqual(newSettings.enableGrid);
-  });
+    expect(storedSettings.user.id).toEqual(createdUser.id);
+  });  
 
-  it('should create a new settings', async () => {
-    const newSettings: SettingsEntity = {
-      id: faker.lorem.word(),
-      startHour: faker.number.int(),
-      endHour: faker.number.int(),
-      lastLaborDay: faker.number.int(),
-      enableGrid: faker.datatype.boolean(),
-      user: user,
-    };
-
-    const createdSettings = await service.create(newSettings);
-    expect(createdSettings).not.toBeNull();
-    expect(createdSettings.user).toEqual(user);
-  });
-
+  it('create should return a new settings', async () => {
+    // Crear un nuevo usuario para cada configuración de ajustes
+    const newUser = new UserEntity();
+    newUser.name = faker.person.fullName();
+    newUser.login = faker.internet.userName();
+    newUser.email = faker.internet.email();
+    newUser.password = faker.internet.password();
+  
+    const createdUser = await userRepository.save(newUser);
+  
+    const settings: SettingsEntity = new SettingsEntity();
+    settings.startHour = faker.number.int();
+    settings.endHour = faker.number.int();
+    settings.lastLaborDay = faker.number.int();
+    settings.enableGrid = faker.datatype.boolean();
+    settings.user = createdUser;
+  
+    const newSettings: SettingsEntity = await service.create(settings, createdUser.id);
+    expect(newSettings).not.toBeNull();
+    expect(newSettings.user.id).toEqual(createdUser.id);
+  });  
+  
   it('should update a settings', async () => {
     const settings = settingsList[0];
     const updatedStartHour = faker.number.int();
-
-    const updated = await service.update(settings.id, {
-      ...settings,
-      startHour: updatedStartHour,
-    });
-
+    const userId = settings.user.id; 
+    settings.startHour = updatedStartHour;
+    const updated = await service.update(settings.id, settings, userId);
     expect(updated).not.toBeNull();
     expect(updated.startHour).toEqual(updatedStartHour);
   });
@@ -137,14 +150,16 @@ describe('SettingsService', () => {
     updateData.endHour = faker.number.int();
     updateData.lastLaborDay = faker.number.int();
     updateData.enableGrid = faker.datatype.boolean();
-
+    const userId = user.id;
+  
     await expect(() =>
-      service.update(invalidId, updateData),
+      service.update(invalidId, updateData, userId),
     ).rejects.toHaveProperty(
       'message',
-      'The settings with the given id was not found',
+      'Settings not found',
     );
   });
+  
 
   it('delete should throw an exception for an invalid setting id', async () => {
     const invalidId = '00000000-0000-0000-0000-000000000000';

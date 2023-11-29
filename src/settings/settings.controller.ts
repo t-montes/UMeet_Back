@@ -22,17 +22,17 @@ export class SettingsController {
     }
 
     @Post()
-    async create(@Body() settingsDto: SettingsDto): Promise<SettingsEntity> {
-        return await this.settingsService.create(settingsDto);
+    async create(@Body() settingsDto: SettingsDto, @Param('userId') userId: string): Promise<SettingsEntity> {
+        const settings = new SettingsEntity();
+        Object.assign(settings, settingsDto);
+        return await this.settingsService.create(settings, userId);
     }
 
     @Put(':id')
-    async update(@Param('id') id: string, @Body() settingsDto: SettingsDto): Promise<SettingsEntity> {
-        const settings = await this.settingsService.update(id, settingsDto);
-        if (!settings) {
-            throw new NotFoundException('Settings not found');
-        }
-        return settings;
+    async update(@Param('id') id: string, @Body() settingsDto: SettingsDto, @Param('userId') userId: string): Promise<SettingsEntity> {
+        const settings = new SettingsEntity();
+        Object.assign(settings, settingsDto);
+        return await this.settingsService.update(id, settings, userId);
     }
 
     @Delete(':id')

@@ -28,25 +28,27 @@ export class SettingsService {
     return settings;
   }
 
-  async create(settings: SettingsEntity): Promise<SettingsEntity> {
+  async create(settings: SettingsEntity, userId: string): Promise<SettingsEntity> {
+    const user = await this.userRepository.findOne({ where: { id: userId } });
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
+    settings.user = user;
     return await this.settingsRepository.save(settings);
   }
 
-  async update(id: string, settings: SettingsEntity): Promise<SettingsEntity> {
-    const persistedSettings: SettingsEntity =
-      await this.settingsRepository.findOne({
-        where: { id },
-      });
+  async update(id: string, settings: SettingsEntity, userId: string): Promise<SettingsEntity> {
+    const existingSettings = await this.settingsRepository.findOne({ where: { id }, relations: ['user'] });
+    if (!existingSettings) {
+      throw new BadRequestException('Settings not found');
+    }
 
-    if (!persistedSettings)
-      throw new BadRequestException(
-        'The settings with the given id was not found',
-      );
+    if (existingSettings.user.id !== userId) {
+      throw new BadRequestException('User mismatch');
+    }
 
-    return await this.settingsRepository.save({
-      ...persistedSettings,
-      ...settings,
-    });
+    Object.assign(existingSettings, settings);
+    return await this.settingsRepository.save(existingSettings);
   }
 
   async delete(id: string) {
@@ -59,7 +61,6 @@ export class SettingsService {
       throw new BadRequestException(
         'The settings with the given id was not found',
       );
-
     await this.settingsRepository.remove(settings);
   }
 }
