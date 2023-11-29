@@ -22,17 +22,17 @@ export class NotificationController {
     }
 
     @Post()
-    async create(@Body() notificationDto: NotificationDto): Promise<NotificationEntity> {
-        return await this.notificationService.create(notificationDto);
+    async create(@Body() notificationDto: NotificationDto, @Param('userId') userId: string): Promise<NotificationEntity> {
+        const notification = new NotificationEntity();
+        Object.assign(notification, notificationDto);
+        return await this.notificationService.create(notification, userId);
     }
 
     @Put(':id')
-    async update(@Param('id') id: string, @Body() notificationDto: NotificationDto): Promise<NotificationEntity> {
-        const notification = await this.notificationService.update(id, notificationDto);
-        if (!notification) {
-            throw new NotFoundException('Notification not found');
-        }
-        return notification;
+    async update(@Param('id') id: string, @Body() notificationDto: NotificationDto, @Param('userId') userId: string): Promise<NotificationEntity> {
+        const notification = new NotificationEntity();
+        Object.assign(notification, notificationDto);
+        return await this.notificationService.update(id, notification, userId);
     }
 
     @Delete(':id')

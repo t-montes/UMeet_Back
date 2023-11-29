@@ -34,7 +34,7 @@ describe('NotificationService', () => {
     await userRepository.clear();
     const newUser = new UserEntity();
     newUser.login = faker.lorem.word();
-    newUser.password = faker.lorem.word();
+    newUser.password = faker.internet.password();
     newUser.email = faker.lorem.word();
     newUser.name = faker.lorem.word();
     user = await userRepository.save(newUser);
@@ -79,46 +79,55 @@ describe('NotificationService', () => {
     notification.text = faker.lorem.word();
     notification.date = faker.date.future();
     notification.redirection = faker.internet.url();
-    notification.user = user;
-
-    const newNotification: NotificationEntity = await service.create(
-      notification,
-    );
+    const userId = user.id;
+  
+    const newNotification: NotificationEntity = await service.create(notification, userId);
     expect(newNotification).not.toBeNull();
-
-    const storedNotification: NotificationEntity =
-      await notificationRepository.findOne({
-        where: { id: newNotification.id },
-      });
+  
+    const storedNotification: NotificationEntity = await notificationRepository.findOne({
+      where: { id: newNotification.id },
+      relations: ['user'],
+    });
     expect(storedNotification).not.toBeNull();
+    expect(storedNotification.user.id).toEqual(userId);
+  });
 
-    expect(newNotification.text).toEqual(notification.text);
-    expect(newNotification.date).toEqual(notification.date);
-    expect(newNotification.redirection).toEqual(notification.redirection);
+  it('create should throw an exception for invalid user', async () => {
+    const notification: NotificationEntity = new NotificationEntity();
+    notification.text = faker.lorem.word();
+    notification.date = faker.date.future();
+    notification.redirection = faker.internet.url();
+    const invalidUserId = 'invalid-uuid';
+  
+    await expect(service.create(notification, invalidUserId)).rejects.toHaveProperty(
+      'message', 
+      'User not found'
+    );
   });
 
   it('should update a notification', async () => {
     const notification = notificationList[0];
     const updatedText = 'Updated notification text';
-
+    const userId = notification.user.id;
     const updated = await service.update(notification.id, {
       ...notification,
       text: updatedText,
-    });
-
+    }, userId);
+  
     expect(updated).not.toBeNull();
     expect(updated.text).toEqual(updatedText);
   });
-
+  
   it('update should throw an exception for an invalid notification id', async () => {
     const invalidNotification = new NotificationEntity();
     invalidNotification.text = 'Invalid';
-
+    const fakeUserId = 'any-valid-uuid';
+  
     await expect(() => 
-      service.update('invalid-id', invalidNotification)
+      service.update('invalid-id', invalidNotification, fakeUserId)
     ).rejects.toHaveProperty(
       'message', 
-      'The notification with the given id was not found'
+      'Notification not found'
     );
   });
 

@@ -1,5 +1,4 @@
 import { Column, Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
-
 import { UserEntity } from '../user/user.entity';
 
 @Entity()
@@ -16,6 +15,8 @@ export class NotificationEntity {
   @Column()
   redirection: string;
 
-  @ManyToOne(() => UserEntity, (user) => user.notifications)
+  @ManyToOne(() => UserEntity, (user) => user.notifications, {
+    onDelete: 'CASCADE',
+  })
   user: UserEntity;
 }
