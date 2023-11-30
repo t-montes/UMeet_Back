@@ -103,13 +103,14 @@ describe('UserService', () => {
     const user: UserEntity = new UserEntity();
     user.email = usersList[0].email; // Usar un email ya existente
     user.login = faker.internet.userName();
-    user.password = faker.internet.password();
-
+    user.password = "contraSenha1234%"
+  
     await expect(service.create(user)).rejects.toHaveProperty(
       'message',
       'SQLITE_CONSTRAINT: NOT NULL constraint failed: user_entity.name'
     );
   });
+  
 
   it('update should modify a user', async () => {
     const user: UserEntity = usersList[0];

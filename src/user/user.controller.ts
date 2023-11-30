@@ -1,11 +1,11 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body, HttpCode, UseGuards } from '@nestjs/common';
 import { UseInterceptors } from '@nestjs/common';
 import { BusinessErrorsInterceptor } from '../shared/interceptors/business-errors/business-errors.interceptor';
 import { plainToInstance } from 'class-transformer';
 import { UserService } from './user.service';
-import { Get, Post, Put, Delete, Param, Body, HttpCode } from '@nestjs/common';
 import { UserDTO } from './user.dto';
 import { UserEntity } from './user.entity';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @Controller('users')
 @UseInterceptors(BusinessErrorsInterceptor)
@@ -22,12 +22,14 @@ export class UserController {
     return await this.userService.findOne(userId);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post()
   @HttpCode(201)
   async create(@Body() userDTO: UserDTO) {
     return await this.userService.create(plainToInstance(UserEntity, userDTO));
   }
 
+  @UseGuards(JwtAuthGuard)
   @Put(':userId')
   async update(@Param('userId') userId: string, @Body() userDTO: UserDTO) {
     return await this.userService.update(
@@ -36,6 +38,7 @@ export class UserController {
     );
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':userId')
   @HttpCode(204)
   async delete(@Param('userId') userId: string) {

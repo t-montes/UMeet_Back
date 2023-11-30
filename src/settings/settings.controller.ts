@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, NotFoundException } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, NotFoundException, UseGuards } from '@nestjs/common';
 import { SettingsService } from './settings.service';
 import { SettingsDto } from './settings.dto';
 import { SettingsEntity } from './settings.entity';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @Controller('settings')
 export class SettingsController {
@@ -21,6 +22,7 @@ export class SettingsController {
         return settings;
     }
 
+    @UseGuards(JwtAuthGuard)
     @Post()
     async create(@Body() settingsDto: SettingsDto, @Param('userId') userId: string): Promise<SettingsEntity> {
         const settings = new SettingsEntity();
@@ -28,6 +30,7 @@ export class SettingsController {
         return await this.settingsService.create(settings, userId);
     }
 
+    @UseGuards(JwtAuthGuard)
     @Put(':id')
     async update(@Param('id') id: string, @Body() settingsDto: SettingsDto, @Param('userId') userId: string): Promise<SettingsEntity> {
         const settings = new SettingsEntity();
@@ -35,6 +38,7 @@ export class SettingsController {
         return await this.settingsService.update(id, settings, userId);
     }
 
+    @UseGuards(JwtAuthGuard)
     @Delete(':id')
     async delete(@Param('id') id: string): Promise<void> {
         const settings = await this.settingsService.findOne(id);
@@ -43,5 +47,4 @@ export class SettingsController {
         }
         await this.settingsService.delete(id);
     }
-
 }
