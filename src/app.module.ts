@@ -14,6 +14,8 @@ import { GroupModule } from './group/group.module';
 import { GroupEntity } from './group/group.entity';
 import { SettingsModule } from './settings/settings.module';
 import { SettingsEntity } from './settings/settings.entity';
+import { UsuarioModule } from './usuario/usuario.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -42,6 +44,8 @@ import { SettingsEntity } from './settings/settings.entity';
     }),
     GroupModule,
     SettingsModule,
+    UsuarioModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
