@@ -3,8 +3,8 @@ import { Controller, Post, Req, UseGuards } from '@nestjs/common';
 import { LocalAuthGuard } from '../auth/guards/local-auth.guard';
 import { AuthService } from '../auth/auth.service';
 
-@Controller('usuarios')
-export class UsuarioController {
+@Controller('people')
+export class PersonController {
 
     constructor(private readonly authService: AuthService){}
     @UseGuards(LocalAuthGuard)

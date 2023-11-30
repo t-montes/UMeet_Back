@@ -1,9 +1,10 @@
-export class Usuario {
+/* eslint-disable prettier/prettier */
+export class Person {
     id: number;
     username: string;
     password: string;
     roles: string[];
-
+ 
     constructor(id: number, username: string, password: string, roles: string[]) {
         this.id = id;
         this.username = username;
@@ -11,3 +12,4 @@ export class Usuario {
         this.roles = roles;
     }
 }
+
