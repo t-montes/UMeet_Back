@@ -151,4 +151,25 @@ describe('NotificationService', () => {
     );
   });
 
+  it('findAllByUserId should return empty array for a user with no notifications', async () => {
+    const newUser = new UserEntity();
+    newUser.login = faker.lorem.word();
+    newUser.password = faker.internet.password();
+    newUser.email = faker.lorem.word();
+    newUser.name = faker.lorem.word();
+    const noNotificationUser = await userRepository.save(newUser);
+  
+    const notifications = await service.findAllByUserId(noNotificationUser.id);
+    expect(notifications).not.toBeNull();
+    expect(notifications).toHaveLength(0);
+  });
+  
+  it('findAllByUserId should throw an exception for an invalid user id', async () => {
+    const invalidUserId = 'invalid-uuid';
+    await expect(service.findAllByUserId(invalidUserId)).rejects.toHaveProperty(
+      'message', 
+      'User not found'
+    );
+  });
+
 });

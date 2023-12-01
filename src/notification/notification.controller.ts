@@ -24,18 +24,18 @@ export class NotificationController {
 
     @UseGuards(JwtAuthGuard)
     @Post()
-    async create(@Body() notificationDto: NotificationDto, @Param('userId') userId: string): Promise<NotificationEntity> {
+    async create(@Body() notificationDto: NotificationDto): Promise<NotificationEntity> {
         const notification = new NotificationEntity();
         Object.assign(notification, notificationDto);
-        return await this.notificationService.create(notification, userId);
+        return await this.notificationService.create(notification, notificationDto.userId);
     }
 
     @UseGuards(JwtAuthGuard)
-    @Put(':id')
-    async update(@Param('id') id: string, @Body() notificationDto: NotificationDto, @Param('userId') userId: string): Promise<NotificationEntity> {
+    @Put(':notificationId/user/:userId')
+    async update(@Param('notificationId') notificationId: string, @Param('userId') userId: string, @Body() notificationDto: NotificationDto): Promise<NotificationEntity> {
         const notification = new NotificationEntity();
         Object.assign(notification, notificationDto);
-        return await this.notificationService.update(id, notification, userId);
+        return await this.notificationService.update(notificationId, notification, userId);
     }
 
     @UseGuards(JwtAuthGuard)
@@ -47,4 +47,11 @@ export class NotificationController {
         }
         await this.notificationService.delete(id);
     }
+
+    @UseGuards(JwtAuthGuard)
+    @Get('/user/:userId')
+    async findAllByUser(@Param('userId') userId: string): Promise<NotificationEntity[]> {
+    return await this.notificationService.findAllByUserId(userId);
+    }
+
 }

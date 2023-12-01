@@ -32,8 +32,9 @@ export class NotificationService {
 
   async create(notification: NotificationEntity, userId: string): Promise<NotificationEntity> {
     const user = await this.userRepository.findOne({ where: { id: userId } });
-    if (!user) throw new BadRequestException('User not found');
-
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
     notification.user = user;
     return await this.notificationRepository.save(notification);
   }
@@ -66,4 +67,18 @@ export class NotificationService {
 
     await this.notificationRepository.remove(notification);
   }
+
+  async findAllByUserId(userId: string): Promise<NotificationEntity[]> {
+    const user = await this.userRepository.findOne({ where: { id: userId } });
+  
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
+  
+    return await this.notificationRepository.find({
+      where: { user: { id: userId } },
+      relations: ['user'],
+    });
+  }  
+  
 }
