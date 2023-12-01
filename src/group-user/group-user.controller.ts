@@ -20,6 +20,19 @@ import { UserDTO } from '../user/user.dto';
 export class GroupUserController {
   constructor(private readonly groupUserService: GroupUserService) {}
 
+  @Post(':groupId/owner/:userId')
+  async addOwnerGroup(
+    @Param('groupId') groupId: string,
+    @Param('userId') userId: string,
+  ) {
+    return await this.groupUserService.addOwnerGroup(groupId, userId);
+  }
+
+  @Get(':groupId/owner')
+  async findOwnerByGroupId(@Param('groupId') groupId: string) {
+    return await this.groupUserService.findOwnerByGroupId(groupId);
+  }
+
   @Post(':groupId/members/:userId')
   async addUserGroup(
     @Param('groupId') groupId: string,

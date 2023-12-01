@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { QueryFailedError, Repository } from 'typeorm';
 import { UserEntity } from './user.entity';
+import { GroupEntity } from '../group/group.entity';
 import { CalendarEntity } from '../calendar/calendar.entity';
 import { SettingsEntity } from '../settings/settings.entity';
 import { validateEntity } from '../shared/utils';
@@ -18,13 +19,13 @@ export class UserService {
   ) {}
 
   async findAll(): Promise<UserEntity[]> {
-    return await this.userRepository.find(/*{relations: ['friends', 'groups']}*/);
+    return await this.userRepository.find({relations: ['friends', 'groups']});
   }
 
   async findOne(id: string): Promise<UserEntity> {
     const user: UserEntity = await this.userRepository.findOne({
       where: { id },
-      relations: ['calendar', 'settings' /*, 'friends', 'groups' */],
+      relations: ['calendar', 'settings' , 'friends', 'groups'],
     });
     if (!user)
       throw new BadRequestException('The user with the given id was not found');
@@ -161,5 +162,31 @@ export class UserService {
     await this.userRepository.save(user);
 
     return user;
+  }
+
+  async findFriends(userId: string): Promise<UserEntity[]> {
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+      relations: ['friends'],
+    });
+
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
+
+    return user.friends;
+  }
+
+  async findGroups(userId: string): Promise<GroupEntity[]> {
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+      relations: ['groups'],
+    });
+
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
+
+    return user.groups;
   }
 }

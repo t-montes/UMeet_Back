@@ -8,9 +8,4 @@ export class GroupDto {
 
   @IsString()
   topic: string;
-
-  memberIds: string[];
-
-  @IsUUID()
-  ownerId: string;
 }

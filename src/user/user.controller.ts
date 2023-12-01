@@ -22,14 +22,19 @@ export class UserController {
     return await this.userService.findOne(userId);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @Get(':userId/groups')
+  async findUsersByGroupId(@Param('userId') userId: string) {
+    return await this.userService.findGroups(userId);
+  }
+
+  //@UseGuards(JwtAuthGuard)
   @Post()
   @HttpCode(201)
   async create(@Body() userDTO: UserDTO) {
     return await this.userService.create(plainToInstance(UserEntity, userDTO));
   }
 
-  @UseGuards(JwtAuthGuard)
+  //@UseGuards(JwtAuthGuard)
   @Put(':userId')
   async update(@Param('userId') userId: string, @Body() userDTO: UserDTO) {
     return await this.userService.update(
@@ -38,7 +43,7 @@ export class UserController {
     );
   }
 
-  @UseGuards(JwtAuthGuard)
+  //@UseGuards(JwtAuthGuard)
   @Delete(':userId')
   @HttpCode(204)
   async delete(@Param('userId') userId: string) {

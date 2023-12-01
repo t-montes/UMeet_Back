@@ -16,7 +16,7 @@ export class GroupCalendarController {
 
   @Get()
   async getEvents(@Param('groupId') groupId: string) {
-    return await this.calendarService.getEvents(true, groupId);
+    return await this.calendarService.getEvents(false, groupId);
   }
 
   @Post()

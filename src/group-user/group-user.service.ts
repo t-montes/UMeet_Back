@@ -15,6 +15,26 @@ export class GroupUserService {
         private readonly userRepository: Repository<UserEntity>
     ) {}
     
+    async addOwnerGroup(groupId: string, userId: string): Promise<GroupEntity> {
+      const user: UserEntity = await this.userRepository.findOne({where: {id: userId}});
+      if (!user)
+        throw new BusinessLogicException("The user with the given id was not found", BusinessError.NOT_FOUND);
+    
+      const group: GroupEntity = await this.groupRepository.findOne({where: {id: groupId}, relations: ["members", "owner", "calendar"]})
+      if (!group)
+        throw new BusinessLogicException("The group with the given id was not found", BusinessError.NOT_FOUND);
+  
+      group.owner = user;
+      return await this.groupRepository.save(group);
+    }
+
+    async findOwnerByGroupId(groupId: string): Promise<UserEntity> {
+      const group: GroupEntity = await this.groupRepository.findOne({where: {id: groupId}, relations: ["owner"]});
+      if (!group)
+        throw new BusinessLogicException("The group with the given id was not found", BusinessError.NOT_FOUND)
+      return group.owner;
+    }
+
     async addUserGroup(groupId: string, userId: string): Promise<GroupEntity> {
         const user: UserEntity = await this.userRepository.findOne({where: {id: userId}});
         if (!user)
