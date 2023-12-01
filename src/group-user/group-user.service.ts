@@ -107,4 +107,4 @@ export class GroupUserService {
         await this.groupRepository.save(group);
     }  
 
-}
+  }
