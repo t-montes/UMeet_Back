@@ -28,7 +28,10 @@ export class SettingsService {
     return settings;
   }
 
-  async create(settings: SettingsEntity, userId: string): Promise<SettingsEntity> {
+  async create(
+    settings: SettingsEntity,
+    userId: string,
+  ): Promise<SettingsEntity> {
     const user = await this.userRepository.findOne({ where: { id: userId } });
     if (!user) {
       throw new BadRequestException('User not found');
@@ -37,8 +40,15 @@ export class SettingsService {
     return await this.settingsRepository.save(settings);
   }
 
-  async update(id: string, settings: SettingsEntity, userId: string): Promise<SettingsEntity> {
-    const existingSettings = await this.settingsRepository.findOne({ where: { id }, relations: ['user'] });
+  async update(
+    id: string,
+    settings: SettingsEntity,
+    userId: string,
+  ): Promise<SettingsEntity> {
+    const existingSettings = await this.settingsRepository.findOne({
+      where: { id },
+      relations: ['user'],
+    });
     if (!existingSettings) {
       throw new BadRequestException('Settings not found');
     }

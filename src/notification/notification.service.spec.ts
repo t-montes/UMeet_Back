@@ -66,11 +66,9 @@ describe('NotificationService', () => {
   });
 
   it('findOne should throw an exception for an invalid notification id', async () => {
-    await expect(() => 
-      service.findOne('invalid-id')
-    ).rejects.toHaveProperty(
-      'message', 
-      'The notification with the given id was not found'
+    await expect(() => service.findOne('invalid-id')).rejects.toHaveProperty(
+      'message',
+      'The notification with the given id was not found',
     );
   });
 
@@ -80,14 +78,18 @@ describe('NotificationService', () => {
     notification.date = faker.date.future();
     notification.redirection = faker.internet.url();
     const userId = user.id;
-  
-    const newNotification: NotificationEntity = await service.create(notification, userId);
+
+    const newNotification: NotificationEntity = await service.create(
+      notification,
+      userId,
+    );
     expect(newNotification).not.toBeNull();
-  
-    const storedNotification: NotificationEntity = await notificationRepository.findOne({
-      where: { id: newNotification.id },
-      relations: ['user'],
-    });
+
+    const storedNotification: NotificationEntity =
+      await notificationRepository.findOne({
+        where: { id: newNotification.id },
+        relations: ['user'],
+      });
     expect(storedNotification).not.toBeNull();
     expect(storedNotification.user.id).toEqual(userId);
   });
@@ -98,37 +100,37 @@ describe('NotificationService', () => {
     notification.date = faker.date.future();
     notification.redirection = faker.internet.url();
     const invalidUserId = 'invalid-uuid';
-  
-    await expect(service.create(notification, invalidUserId)).rejects.toHaveProperty(
-      'message', 
-      'User not found'
-    );
+
+    await expect(
+      service.create(notification, invalidUserId),
+    ).rejects.toHaveProperty('message', 'User not found');
   });
 
   it('should update a notification', async () => {
     const notification = notificationList[0];
     const updatedText = 'Updated notification text';
     const userId = notification.user.id;
-    const updated = await service.update(notification.id, {
-      ...notification,
-      text: updatedText,
-    }, userId);
-  
+    const updated = await service.update(
+      notification.id,
+      {
+        ...notification,
+        text: updatedText,
+      },
+      userId,
+    );
+
     expect(updated).not.toBeNull();
     expect(updated.text).toEqual(updatedText);
   });
-  
+
   it('update should throw an exception for an invalid notification id', async () => {
     const invalidNotification = new NotificationEntity();
     invalidNotification.text = 'Invalid';
     const fakeUserId = 'any-valid-uuid';
-  
-    await expect(() => 
-      service.update('invalid-id', invalidNotification, fakeUserId)
-    ).rejects.toHaveProperty(
-      'message', 
-      'Notification not found'
-    );
+
+    await expect(() =>
+      service.update('invalid-id', invalidNotification, fakeUserId),
+    ).rejects.toHaveProperty('message', 'Notification not found');
   });
 
   it('should delete a notification', async () => {
@@ -143,11 +145,9 @@ describe('NotificationService', () => {
   });
 
   it('delete should throw an exception for an invalid notification id', async () => {
-    await expect(() => 
-      service.delete('invalid-id')
-    ).rejects.toHaveProperty(
-      'message', 
-      'The notification with the given id was not found'
+    await expect(() => service.delete('invalid-id')).rejects.toHaveProperty(
+      'message',
+      'The notification with the given id was not found',
     );
   });
 
@@ -158,18 +158,17 @@ describe('NotificationService', () => {
     newUser.email = faker.lorem.word();
     newUser.name = faker.lorem.word();
     const noNotificationUser = await userRepository.save(newUser);
-  
+
     const notifications = await service.findAllByUserId(noNotificationUser.id);
     expect(notifications).not.toBeNull();
     expect(notifications).toHaveLength(0);
   });
-  
+
   it('findAllByUserId should throw an exception for an invalid user id', async () => {
     const invalidUserId = 'invalid-uuid';
     await expect(service.findAllByUserId(invalidUserId)).rejects.toHaveProperty(
-      'message', 
-      'User not found'
+      'message',
+      'User not found',
     );
   });
-
 });

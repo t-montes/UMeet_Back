@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { QueryFailedError, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { NotificationEntity } from './notification.entity';
 import { UserEntity } from '../user/user.entity';
 
@@ -30,7 +30,10 @@ export class NotificationService {
     return notification;
   }
 
-  async create(notification: NotificationEntity, userId: string): Promise<NotificationEntity> {
+  async create(
+    notification: NotificationEntity,
+    userId: string,
+  ): Promise<NotificationEntity> {
     const user = await this.userRepository.findOne({ where: { id: userId } });
     if (!user) {
       throw new BadRequestException('User not found');
@@ -39,10 +42,14 @@ export class NotificationService {
     return await this.notificationRepository.save(notification);
   }
 
-  async update(id: string, notificationDto: NotificationEntity, userId: string): Promise<NotificationEntity> {
-    const existingNotification = await this.notificationRepository.findOne({ 
+  async update(
+    id: string,
+    notificationDto: NotificationEntity,
+    userId: string,
+  ): Promise<NotificationEntity> {
+    const existingNotification = await this.notificationRepository.findOne({
       where: { id },
-      relations: ['user'], 
+      relations: ['user'],
     });
 
     if (!existingNotification) {
@@ -70,15 +77,14 @@ export class NotificationService {
 
   async findAllByUserId(userId: string): Promise<NotificationEntity[]> {
     const user = await this.userRepository.findOne({ where: { id: userId } });
-  
+
     if (!user) {
       throw new BadRequestException('User not found');
     }
-  
+
     return await this.notificationRepository.find({
       where: { user: { id: userId } },
       relations: ['user'],
     });
-  }  
-  
+  }
 }
