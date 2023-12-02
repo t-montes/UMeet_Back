@@ -110,7 +110,234 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"Emilio\",\r\n    \"login\": \"emil.io\",\r\n    \"email\": \"emil.io@gmail.com\",\r\n    \"password\": \"Emilio01\"\r\n}",
+					"raw": "{\r\n    \"name\": \"Emilio\",\r\n    \"login\": \"emil3.io\",\r\n    \"email\": \"emil3.io@gmail.com\",\r\n    \"password\": \"Emilio01\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/users",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Create a User",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Emilio\",\r\n    \"login\": \"emil.io\",\r\n    \"email\": \"emil.io@gmail.com\",\r\n    \"password\": \"Emilio01\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/users",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": \"8051e048-de13-4539-9db4-5e7847515493\",\n    \"name\": \"Emilio\",\n    \"login\": \"emil.io\",\n    \"email\": \"emil.io@gmail.com\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Create an Owner",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"   pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/groups/{{group_id}}/owner/{{user_id}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"groups",
+						"{{group_id}}",
+						"owner",
+						"{{user_id}}"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Create a User",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Emilio\",\r\n    \"login\": \"emil.io\",\r\n    \"email\": \"emil.io@gmail.com\",\r\n    \"password\": \"Emilio01\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/users",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": \"8051e048-de13-4539-9db4-5e7847515493\",\n    \"name\": \"Emilio\",\n    \"login\": \"emil.io\",\n    \"email\": \"emil.io@gmail.com\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Get an Owner",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/groups/{{group_id}}/owner",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"groups",
+						"{{group_id}}",
+						"owner"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Get Members",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/groups/{{group_id}}/members",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"groups",
+								"{{group_id}}",
+								"members"
+							]
+						}
+					},
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\r\n    \"data\": [\r\n        {\r\n            \"id\": \"uuid-1234\",\r\n            \"login\": \"user1\",\r\n            \"email\": \"user1@email.com\",\r\n            \"name\": \"Usuario 1\"\r\n        },\r\n        {\r\n            \"id\": \"uuid-5678\",\r\n            \"login\": \"user2\",\r\n            \"email\": \"user2@email.com\",\r\n            \"name\": \"Usuario 2\"\r\n        }\r\n    ]\r\n}\r\n"
+				}
+			]
+		},
+		{
+			"name": "Create a User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json()\r",
+							"pm.globals.set(\"user_id\", data.id);\r",
+							"\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"   pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Emilio\",\r\n    \"login\": \"emil4.io\",\r\n    \"email\": \"emil4.io@gmail.com\",\r\n    \"password\": \"Emilio01\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -187,24 +414,16 @@
 			"request": {
 				"method": "POST",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"userId\": \"{{user_id}}\"\r\n}\r\n",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
 				"url": {
-					"raw": "{{baseURL}}/groups/{{group_id}}/members",
+					"raw": "{{baseURL}}/groups/{{group_id}}/members/{{user_id}}",
 					"host": [
 						"{{baseURL}}"
 					],
 					"path": [
 						"groups",
 						"{{group_id}}",
-						"members"
+						"members",
+						"{{user_id}}"
 					]
 				}
 			},
@@ -320,8 +539,8 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Status code is 200\", function () {\r",
-							"    pm.response.to.have.status(200);\r",
+							"pm.test(\"Status code is 204\", function () {\r",
+							"    pm.response.to.have.status(204);\r",
 							"});"
 						],
 						"type": "text/javascript"

@@ -9,6 +9,86 @@
 	},
 	"item": [
 		{
+			"name": "Create Group",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json()\r",
+							"pm.globals.set(\"group_id\", data.id);\r",
+							"\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Grupo 1\",\r\n    \"topic\": \"Tema 1\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/groups",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"groups"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Create Group",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"test_name\",\r\n    \"topic\": \"test_topic\",\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/groups",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"groups"
+							]
+						}
+					},
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\r\n    \"name\": \"test_name\",\r\n    \"topic\": \"test_topic\",\r\n    \"id\": \"8051e048-de13-4539-9db4-5e7847515493\"\r\n}\r\n"
+				}
+			]
+		},
+		{
 			"name": "Create a User",
 			"event": [
 				{
@@ -32,6 +112,170 @@
 				"body": {
 					"mode": "raw",
 					"raw": "{\r\n    \"name\": \"Emilio\",\r\n    \"login\": \"emil.io\",\r\n    \"email\": \"emil.io@gmail.com\",\r\n    \"password\": \"Emilio01\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/users",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Create a User",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Emilio\",\r\n    \"login\": \"emil.io\",\r\n    \"email\": \"emil.io@gmail.com\",\r\n    \"password\": \"Emilio01\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/users",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": \"8051e048-de13-4539-9db4-5e7847515493\",\n    \"name\": \"Emilio\",\n    \"login\": \"emil.io\",\n    \"email\": \"emil.io@gmail.com\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Create an Owner",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"   pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/groups/{{group_id}}/owner/{{user_id}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"groups",
+						"{{group_id}}",
+						"owner",
+						"{{user_id}}"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Create a User",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Emilio\",\r\n    \"login\": \"emil.io\",\r\n    \"email\": \"emil.io@gmail.com\",\r\n    \"password\": \"Emilio01\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/users",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": \"8051e048-de13-4539-9db4-5e7847515493\",\n    \"name\": \"Emilio\",\n    \"login\": \"emil.io\",\n    \"email\": \"emil.io@gmail.com\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Create a User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json()\r",
+							"pm.globals.set(\"user_id\", data.id);\r",
+							"\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"   pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Emilio\",\r\n    \"login\": \"emil2.io\",\r\n    \"email\": \"emil2.io@gmail.com\",\r\n    \"password\": \"Emilio01\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -83,71 +327,6 @@
 			]
 		},
 		{
-			"name": "Create Group",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"group_id\": \"{{group_id}}\"\r\n}\r\n",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{baseURL}}/groups/{{group_id}}",
-					"host": [
-						"{{baseURL}}"
-					],
-					"path": [
-						"groups",
-						"{{group_id}}"
-					]
-				}
-			},
-			"response": [
-				{
-					"name": "Create Group",
-					"originalRequest": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"test_name\",\r\n    \"topic\": \"test_topic\",\r\n}\r\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseURL}}/groups",
-							"host": [
-								"{{baseURL}}"
-							],
-							"path": [
-								"groups"
-							]
-						}
-					},
-					"_postman_previewlanguage": "json",
-					"header": [
-						{
-							"key": "Content-Type",
-							"value": "application/json",
-							"name": "Content-Type",
-							"description": "",
-							"type": "text"
-						}
-					],
-					"cookie": [],
-					"body": "{\r\n    \"name\": \"test_name\",\r\n    \"topic\": \"test_topic\",\r\n    \"id\": \"8051e048-de13-4539-9db4-5e7847515493\"\r\n}\r\n"
-				}
-			]
-		},
-		{
 			"name": "Add Member",
 			"event": [
 				{
@@ -165,24 +344,16 @@
 			"request": {
 				"method": "POST",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"userId\": \"{{user_id}}\"\r\n}\r\n",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
 				"url": {
-					"raw": "{{baseURL}}/groups/{{group_id}}/members",
+					"raw": "{{baseURL}}/groups/{{group_id}}/members/{{user_id}}",
 					"host": [
 						"{{baseURL}}"
 					],
 					"path": [
 						"groups",
 						"{{group_id}}",
-						"members"
+						"members",
+						"{{user_id}}"
 					]
 				}
 			},
@@ -224,7 +395,7 @@
 						}
 					],
 					"cookie": [],
-					"body": "{\n    \"message\": \"Usuario añadido al grupo con éxito\",\n    \"data\": {\n        \"id\": \"1\",\n        \"userId\": \"uuid-9012\"\n    }\n}"
+					"body": "{\n    \"message\": \"Usuario añadido al grupo con éxito\",\n    \"data\": {\n        \"groupId\": \"1\",\n        \"userId\": \"uuid-9012\"\n    }\n}"
 				}
 			]
 		},

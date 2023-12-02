@@ -15,6 +15,9 @@
 					"listen": "test",
 					"script": {
 						"exec": [
+							"var data = pm.response.json()\r",
+							"pm.globals.set(\"group_id\", data.id);\r",
+							"\r",
 							"pm.test(\"Status code is 201\", function () {\r",
 							"    pm.response.to.have.status(201);\r",
 							"});"
@@ -89,7 +92,16 @@
 			"name": "Get Group",
 			"request": {
 				"method": "GET",
-				"header": []
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/groups",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"groups"
+					]
+				}
 			},
 			"response": [
 				{
@@ -191,8 +203,8 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Status code is 200\", function () {\r",
-							"    pm.response.to.have.status(200);\r",
+							"pm.test(\"Status code is 204\", function () {\r",
+							"    pm.response.to.have.status(204);\r",
 							"});"
 						],
 						"type": "text/javascript"
@@ -238,14 +250,24 @@
 			]
 		}
 	],
-	"variable": [
+	"event": [
 		{
-			"key": "group_id",
-			"value": "1"
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
 		},
 		{
-			"key": "wrong_group_id",
-			"value": "0"
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
 		}
 	]
 }
