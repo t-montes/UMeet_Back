@@ -16,12 +16,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @Controller('settings')
 export class SettingsController {
-  constructor(private readonly settingsService: SettingsService) {}
-
-  @Get()
-  async findAll(): Promise<SettingsEntity[]> {
-    return await this.settingsService.findAll();
-  }
+  constructor(private readonly settingsService: SettingsService) { }
 
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<SettingsEntity> {
@@ -33,35 +28,29 @@ export class SettingsController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post()
-  async create(
-    @Body() settingsDto: SettingsDto,
-    @Param('userId') userId: string,
-  ): Promise<SettingsEntity> {
-    const settings = new SettingsEntity();
-    Object.assign(settings, settingsDto);
-    return await this.settingsService.create(settings, userId);
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @Put(':id')
+  @Put(':settingsId/user/:userId')
   async update(
-    @Param('id') id: string,
-    @Body() settingsDto: SettingsDto,
+    @Param('settingsId') settingsId: string,
     @Param('userId') userId: string,
+    @Body() settingsDto: SettingsDto,
   ): Promise<SettingsEntity> {
     const settings = new SettingsEntity();
     Object.assign(settings, settingsDto);
-    return await this.settingsService.update(id, settings, userId);
+    return await this.settingsService.update(
+      settingsId,
+      settings,
+      userId,
+    );
   }
 
   @UseGuards(JwtAuthGuard)
-  @Delete(':id')
-  async delete(@Param('id') id: string): Promise<void> {
-    const settings = await this.settingsService.findOne(id);
-    if (!settings) {
-      throw new NotFoundException('Settings not found');
+  @Get('/user/:userId')
+  async findAllByUser(@Param('userId') userId: string): Promise<SettingsEntity[]> {
+    const settings = await this.settingsService.findAllByUserId(userId);
+    if (settings.length === 0) {
+      throw new NotFoundException('Settings not found for the user');
     }
-    await this.settingsService.delete(id);
+    return settings;
   }
+
 }
