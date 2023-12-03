@@ -6,12 +6,15 @@ import {
   BusinessError,
   BusinessLogicException,
 } from '../shared/interceptors/business-errors/business-errors';
+import { CalendarEntity } from '../calendar/calendar.entity';
 
 @Injectable()
 export class GroupService {
   constructor(
     @InjectRepository(GroupEntity)
     private readonly groupRepository: Repository<GroupEntity>,
+    @InjectRepository(CalendarEntity)
+    private readonly calendarRepository: Repository<CalendarEntity>,
   ) {}
 
   async findAll(): Promise<GroupEntity[]> {
@@ -34,6 +37,10 @@ export class GroupService {
   }
 
   async create(group: GroupEntity): Promise<GroupEntity> {
+    const calendar: CalendarEntity = await this.calendarRepository.save(
+      new CalendarEntity(),
+    );
+    group.calendar = calendar;
     return await this.groupRepository.save(group);
   }
 

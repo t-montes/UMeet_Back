@@ -26,7 +26,7 @@ export class GroupCalendarController {
     @Body() eventDTO: EventDTO,
   ) {
     return await this.calendarService.createEvent(
-      true,
+      false,
       groupId,
       plainToInstance(EventEntity, eventDTO),
     );
