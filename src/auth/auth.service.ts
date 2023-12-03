@@ -24,7 +24,6 @@ export class AuthService {
 
     async login(req: any) {
         const user: APIUser = await this.usersService.findOne(req.user.username);
-        console.log(user);
         const payload = { username: req.user.username, sub: req.user.id,  permissions: user.permissions };
         return {
             token: this.jwtService.sign(payload, { privateKey: constants.JWT_SECRET, expiresIn:constants.JWT_EXPIRES_IN }),

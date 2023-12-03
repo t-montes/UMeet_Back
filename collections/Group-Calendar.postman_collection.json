@@ -87,14 +87,14 @@
 			"response": []
 		},
 		{
-			"name": "API login calendar write",
+			"name": "API login calendar read",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
 							"var token = pm.response.json().token;\r",
-							"pm.globals.set(\"tokenCalendarWrite\", token);"
+							"pm.globals.set(\"tokenCalendarRead\", token);"
 						],
 						"type": "text/javascript"
 					}
@@ -105,7 +105,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\": \"calendarWrite\",\r\n    \"password\": \"write\"\r\n}",
+					"raw": "{\r\n    \"username\": \"calendarRead\",\r\n    \"password\": \"read\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -126,14 +126,14 @@
 			"response": []
 		},
 		{
-			"name": "API login calendar read",
+			"name": "API login calendar write",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
 							"var token = pm.response.json().token;\r",
-							"pm.globals.set(\"tokenCalendarRead\", token);"
+							"pm.globals.set(\"tokenCalendarWrite\", token);"
 						],
 						"type": "text/javascript"
 					}
@@ -144,7 +144,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\": \"calendarRead\",\r\n    \"password\": \"read\"\r\n}",
+					"raw": "{\r\n    \"username\": \"calendarWrite\",\r\n    \"password\": \"write\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -524,7 +524,7 @@
 					"script": {
 						"exec": [
 							"var data = pm.response.json()\r",
-							"pm.globals.set(\"user_id\", data.id);\r",
+							"pm.globals.set(\"member_id\", data.id);\r",
 							"\r",
 							"pm.test(\"Status code is 201\", function () {\r",
 							"   pm.response.to.have.status(201);\r",
@@ -629,7 +629,7 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "{{baseURL}}/groups/{{group_id}}/members/{{user_id}}",
+					"raw": "{{baseURL}}/groups/{{group_id}}/members/{{member_id}}",
 					"host": [
 						"{{baseURL}}"
 					],
@@ -637,7 +637,7 @@
 						"groups",
 						"{{group_id}}",
 						"members",
-						"{{user_id}}"
+						"{{member_id}}"
 					]
 				}
 			},
@@ -852,7 +852,7 @@
 			]
 		},
 		{
-			"name": "Delete a User",
+			"name": "Delete the Member",
 			"event": [
 				{
 					"listen": "test",
@@ -880,13 +880,13 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "{{baseURL}}/users/{{user_id}}",
+					"raw": "{{baseURL}}/users/{{member_id}}",
 					"host": [
 						"{{baseURL}}"
 					],
 					"path": [
 						"users",
-						"{{user_id}}"
+						"{{member_id}}"
 					]
 				}
 			},
@@ -976,6 +976,79 @@
 					"header": null,
 					"cookie": [],
 					"body": null
+				}
+			]
+		},
+		{
+			"name": "Delete the Owner",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204\", function () {\r",
+							"   pm.response.to.have.status(204);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{tokenDelete}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/users/{{user_id}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"users",
+						"{{user_id}}"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Delete a User",
+					"originalRequest": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{tokenDelete}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/users/{{user_id}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users",
+								"{{user_id}}"
+							]
+						}
+					},
+					"_postman_previewlanguage": "",
+					"header": "",
+					"cookie": [],
+					"body": ""
 				}
 			]
 		}

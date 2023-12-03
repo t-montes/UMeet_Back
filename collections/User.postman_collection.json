@@ -9,7 +9,7 @@
 	},
 	"item": [
 		{
-			"name": "API login read",
+			"name": "API login user read",
 			"event": [
 				{
 					"listen": "test",
@@ -48,7 +48,7 @@
 			"response": []
 		},
 		{
-			"name": "API login write",
+			"name": "API login user write",
 			"event": [
 				{
 					"listen": "test",
@@ -87,7 +87,7 @@
 			"response": []
 		},
 		{
-			"name": "API login delete",
+			"name": "API login user delete",
 			"event": [
 				{
 					"listen": "test",
