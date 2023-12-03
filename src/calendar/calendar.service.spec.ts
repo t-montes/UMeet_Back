@@ -53,7 +53,7 @@ describe('CalendarService', () => {
       newEntity.endDate = faker.date.future();
       newEntity.visualEndDate = newEntity.endDate;
       newEntity.description = faker.lorem.paragraph();
-      newEntity.color = faker.internet.color();
+      newEntity.color = '#123456';
       newEntity.calendar = calendarList[i];
       const event: EventEntity = await eventRepository.save(newEntity);
       eventList.push(event);
@@ -83,5 +83,78 @@ describe('CalendarService', () => {
     expect(service).toBeDefined();
   });
 
-  // TODO: Service Tests
+  it('getEvents should return events for a given user', async () => {
+    const user = usersList[0];
+    const calendar = await service.getEvents(true, user.id);
+    expect(calendar).not.toBeNull();
+    expect(calendar.events).not.toBeNull();
+  });
+
+  it('getEvents should throw an exception for non-existent user', async () => {
+    await expect(service.getEvents(true, '0')).rejects.toHaveProperty(
+      'message',
+      'The user with the given id was not found',
+    );
+  });
+
+  it("createEvent should add an event to a user's calendar", async () => {
+    const user = usersList[0];
+    const event = new EventEntity();
+    event.name = faker.lorem.word();
+    event.location = faker.location.city();
+    event.link = faker.internet.url();
+    event.isPrivate = faker.datatype.boolean();
+    event.alert = faker.number.int();
+    const now = new Date();
+    now.setMinutes(now.getMinutes() + (5 - (now.getMinutes() % 5)), 0, 0);
+    event.startDate = new Date(now);
+    event.endDate = new Date(now.getTime() + 30 * 60000);
+    event.visualEndDate = event.endDate;
+    event.description = faker.lorem.paragraph();
+    event.color = '#123456';
+
+    const createdEvent = await service.createEvent(true, user.id, event);
+    expect(createdEvent).not.toBeNull();
+    expect(createdEvent.id).not.toBeNull();
+    expect(createdEvent.name).toEqual(event.name);
+    expect(createdEvent.startDate.getMinutes() % 5).toEqual(0);
+    expect(createdEvent.endDate.getMinutes() % 5).toEqual(0);
+  });
+
+  it('createEvent should throw an exception for invalid date times', async () => {
+    const user = usersList[0];
+    const event = new EventEntity();
+    const now = new Date();
+    now.setMinutes(now.getMinutes() - (now.getMinutes() % 5), 0, 0);
+    event.startDate = new Date(now);
+    event.endDate = new Date(now.getTime() - 5 * 60000);
+    event.color = '#ffffff';
+
+    await expect(
+      service.createEvent(true, user.id, event),
+    ).rejects.toHaveProperty(
+      'message',
+      'The end date must be after the start date',
+    );
+  });
+
+  it('update should modify a calendar', async () => {
+    const user = usersList[0];
+    const newColor = faker.internet.color();
+    user.calendar.color = newColor;
+
+    const updatedCalendar = await service.update(true, user.id, user.calendar);
+    expect(updatedCalendar).not.toBeNull();
+    expect(updatedCalendar.color).toEqual(newColor);
+  });
+
+  it('update should throw an exception for non-existent user', async () => {
+    const calendar = new CalendarEntity();
+    calendar.color = faker.internet.color();
+
+    await expect(service.update(true, '0', calendar)).rejects.toHaveProperty(
+      'message',
+      'The user with the given id was not found',
+    );
+  });
 });

@@ -1,9 +1,7 @@
 import {
   Controller,
   Get,
-  Post,
   Put,
-  Delete,
   Body,
   Param,
   NotFoundException,
@@ -18,7 +16,7 @@ import { Permissions } from '../shared/decorators/permissions.decorator';
 
 @Controller('settings')
 export class SettingsController {
-  constructor(private readonly settingsService: SettingsService) { }
+  constructor(private readonly settingsService: SettingsService) {}
 
   @UseGuards(JwtAuthGuard, PermissionsGuard)
   @Permissions('users:read')
@@ -52,11 +50,7 @@ export class SettingsController {
   ): Promise<SettingsEntity> {
     const settings = new SettingsEntity();
     Object.assign(settings, settingsDto);
-    return await this.settingsService.update(
-      settingsId,
-      settings,
-      userId,
-    );
+    return await this.settingsService.update(settingsId, settings, userId);
   }
 
 }

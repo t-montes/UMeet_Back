@@ -60,5 +60,69 @@ describe('EventService', () => {
     expect(service).toBeDefined();
   });
 
-  // TODO: Service Tests
+  it('get should return an event by id', async () => {
+    const event: EventEntity = eventList[0];
+    const retrievedEvent: EventEntity = await service.get(event.id);
+    expect(retrievedEvent).not.toBeNull();
+    expect(retrievedEvent.id).toEqual(event.id);
+  });
+
+  it('get should throw an exception for a non-existent event', async () => {
+    await expect(service.get('0')).rejects.toHaveProperty(
+      'message',
+      'The event with the given id was not found',
+    );
+  });
+
+  it('update should modify an event', async () => {
+    const event: EventEntity = eventList[0];
+    event.name = 'Updated Event Name';
+
+    const now = new Date();
+    now.setMinutes(now.getMinutes() + (5 - (now.getMinutes() % 5)), 0, 0);
+    event.startDate = new Date(now);
+    event.endDate = new Date(now.getTime() + 30 * 60000);
+
+    const updatedEvent: EventEntity = await service.update(event.id, event);
+    expect(updatedEvent).not.toBeNull();
+    expect(updatedEvent.name).toEqual('Updated Event Name');
+    expect(updatedEvent.startDate.getMinutes() % 5).toEqual(0);
+    expect(updatedEvent.endDate.getMinutes() % 5).toEqual(0);
+  });
+
+  it('update should throw an exception for an invalid event', async () => {
+    const event: EventEntity = eventList[0];
+    await expect(service.update('0', event)).rejects.toHaveProperty(
+      'message',
+      'The event with the given id was not found',
+    );
+  });
+
+  it('update should throw an exception for invalid date times', async () => {
+    const event: EventEntity = eventList[0];
+    const now = new Date();
+    now.setMinutes(now.getMinutes() - (now.getMinutes() % 5), 0, 0);
+    event.startDate = new Date(now);
+    event.endDate = new Date(now.getTime() - 5 * 60000);
+    await expect(service.update(event.id, event)).rejects.toHaveProperty(
+      'message',
+      'The end date must be after the start date',
+    );
+  });
+
+  it('delete should remove an event', async () => {
+    const event: EventEntity = eventList[0];
+    await service.delete(event.id);
+    const deletedEvent: EventEntity = await eventRepository.findOne({
+      where: { id: event.id },
+    });
+    expect(deletedEvent).toBeNull();
+  });
+
+  it('delete should throw an exception for a non-existent event', async () => {
+    await expect(service.delete('0')).rejects.toHaveProperty(
+      'message',
+      'The event with the given id was not found',
+    );
+  });
 });
