@@ -9,7 +9,7 @@ export class PersonController {
     constructor(private readonly authService: AuthService){}
     @UseGuards(LocalAuthGuard)
     @Post('login')
-    async login(@Req() req) {
+    async login(@Req() req: any) {
         return this.authService.login(req);
     }
 }
