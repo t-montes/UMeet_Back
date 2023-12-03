@@ -16,14 +16,16 @@ export class AuthService {
         const user: Person = await this.usersService.findOne(username);
         if (user && user.password === password) {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            const { password, ...result } = user;
-            return result;
+            const { password, permissions, ...result } = user;
+            return {...result, permissions};
         }
         return null;
     }
 
     async login(req: any) {
-        const payload = { username: req.user.username, sub: req.user.id };
+        const user: Person = await this.usersService.findOne(req.user.username);
+        console.log(user);
+        const payload = { username: req.user.username, sub: req.user.id,  permissions: user.permissions};
         return {
             token: this.jwtService.sign(payload, { privateKey: constants.JWT_SECRET, expiresIn:constants.JWT_EXPIRES_IN }),
         };
