@@ -6,6 +6,7 @@ import { faker } from '@faker-js/faker';
 import { SettingsService } from './settings.service';
 import { SettingsEntity } from './settings.entity';
 import { UserEntity } from './../user/user.entity';
+import { BadRequestException } from '@nestjs/common';
 
 describe('SettingsService', () => {
   let service: SettingsService;
@@ -41,13 +42,16 @@ describe('SettingsService', () => {
 
     await settingsRepository.clear();
     settingsList = [];
+    const startHour = faker.number.int({ min: 1, max: 6 });
+    const endHour = faker.number.int({ min: 12, max: 24 });
+
     const newSettings = new SettingsEntity();
-    newSettings.startHour = faker.number.int();
-    newSettings.endHour = faker.number.int();
-    newSettings.lastLaborDay = faker.number.int();
+    newSettings.startHour = startHour;
+    newSettings.endHour = endHour;
+    newSettings.lastLaborDay = faker.number.int({ min: 1, max: 7 });
     newSettings.enableGrid = faker.datatype.boolean();
     newSettings.user = user;
-    const settings: SettingsEntity = await settingsRepository.save(newSettings);
+    const settings = await settingsRepository.save(newSettings);
     settingsList.push(settings);
   };
 
@@ -93,55 +97,25 @@ describe('SettingsService', () => {
 
     const createdUser = await userRepository.save(newUser);
 
-    const settings: SettingsEntity = new SettingsEntity();
-    settings.startHour = faker.number.int();
-    settings.endHour = faker.number.int();
-    settings.lastLaborDay = faker.number.int();
-    settings.enableGrid = faker.datatype.boolean();
-    settings.user = createdUser; // Asignar el nuevo usuario
-
-    const newSettings: SettingsEntity = await service.create(
-      settings,
-      createdUser.id,
-    );
-    expect(newSettings).not.toBeNull();
-
-    const storedSettings: SettingsEntity = await settingsRepository.findOne({
-      where: { id: newSettings.id },
-      relations: ['user'],
-    });
-    expect(storedSettings).not.toBeNull();
-    expect(storedSettings.user.id).toEqual(createdUser.id);
-  });
-
-  it('create should return a new settings', async () => {
-    // Crear un nuevo usuario para cada configuración de ajustes
-    const newUser = new UserEntity();
-    newUser.name = faker.person.fullName();
-    newUser.login = faker.internet.userName();
-    newUser.email = faker.internet.email();
-    newUser.password = faker.internet.password();
-
-    const createdUser = await userRepository.save(newUser);
+    const startHour = faker.number.int({ min: 1, max: 23 });
+    const endHour = faker.number.int({ min: startHour + 1, max: 24 });
 
     const settings: SettingsEntity = new SettingsEntity();
-    settings.startHour = faker.number.int();
-    settings.endHour = faker.number.int();
-    settings.lastLaborDay = faker.number.int();
+    settings.startHour = startHour;
+    settings.endHour = endHour;
+    settings.lastLaborDay = faker.number.int({ min: 1, max: 7 });
     settings.enableGrid = faker.datatype.boolean();
     settings.user = createdUser;
 
-    const newSettings: SettingsEntity = await service.create(
-      settings,
-      createdUser.id,
-    );
+    const newSettings: SettingsEntity = await service.create(settings, createdUser.id);
     expect(newSettings).not.toBeNull();
     expect(newSettings.user.id).toEqual(createdUser.id);
   });
 
+
   it('should update a settings', async () => {
     const settings = settingsList[0];
-    const updatedStartHour = faker.number.int();
+    const updatedStartHour = 8;
     const userId = settings.user.id;
     settings.startHour = updatedStartHour;
     const updated = await service.update(settings.id, settings, userId);
@@ -187,4 +161,49 @@ describe('SettingsService', () => {
       'The settings with the given id was not found',
     );
   });
+
+  it('create should return a new settings with valid values', async () => {
+    // Crear un nuevo usuario para cada configuración de ajustes
+    const newUser = new UserEntity();
+    newUser.name = faker.person.fullName();
+    newUser.login = faker.internet.userName();
+    newUser.email = faker.internet.email();
+    newUser.password = faker.internet.password();
+
+    const createdUser = await userRepository.save(newUser);
+
+    const settings: SettingsEntity = new SettingsEntity();
+    settings.startHour = faker.number.int({ min: 1, max: 12 });
+    settings.endHour = faker.number.int({ min: 13, max: 24 });
+    settings.lastLaborDay = faker.number.int({ min: 1, max: 7 });
+    settings.enableGrid = faker.datatype.boolean();
+    settings.user = createdUser;
+
+    const newSettings: SettingsEntity = await service.create(settings, createdUser.id);
+    expect(newSettings).not.toBeNull();
+  });
+
+  it('create should fail with invalid values', async () => {
+    // Crear y guardar un nuevo usuario
+    const newUser = new UserEntity();
+    newUser.name = faker.person.fullName();
+    newUser.login = faker.internet.userName();
+    newUser.email = faker.internet.email();
+    newUser.password = faker.internet.password();
+    const createdUser = await userRepository.save(newUser);
+
+    // Configuraciones inválidas
+    const invalidSettings: SettingsEntity = new SettingsEntity();
+    invalidSettings.startHour = 25; // Valor fuera de rango
+    invalidSettings.endHour = 0; // Valor fuera de rango
+    invalidSettings.lastLaborDay = 8; // Valor fuera de rango
+    invalidSettings.enableGrid = faker.datatype.boolean();
+    invalidSettings.user = createdUser;
+
+    // Esperar que la creación falle con BadRequestException
+    await expect(service.create(invalidSettings, createdUser.id))
+      .rejects
+      .toThrow(BadRequestException);
+  });
+
 });
