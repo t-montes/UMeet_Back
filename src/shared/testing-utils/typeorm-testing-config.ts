@@ -17,7 +17,7 @@ export const TypeOrmTestingConfig = () => [
       CalendarEntity,
       EventEntity,
       NotificationEntity,
-      GroupEntity /* TODO: Add all entities */,
+      GroupEntity,
       SettingsEntity,
     ],
     synchronize: true,
@@ -28,7 +28,7 @@ export const TypeOrmTestingConfig = () => [
     CalendarEntity,
     EventEntity,
     NotificationEntity,
-    GroupEntity /* TODO: Add all entities */,
+    GroupEntity,
     SettingsEntity,
   ]),
 ];

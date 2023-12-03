@@ -36,7 +36,7 @@ import { GroupUserModule } from './group-user/group-user.module';
         CalendarEntity,
         EventEntity,
         NotificationEntity,
-        GroupEntity /* TODO: Add all entities */,
+        GroupEntity,
         SettingsEntity,
       ],
       dropSchema: true,

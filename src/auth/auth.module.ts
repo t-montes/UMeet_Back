@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { Module } from '@nestjs/common';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
@@ -10,16 +9,21 @@ import { LocalStrategy } from './strategies/local-strategy';
 import { JwtStrategy } from './strategies/jwt-strategy';
 
 @Module({
-    imports: [
-        PersonModule,
-        PassportModule,
-        JwtModule.register({
-          secret: constants.JWT_SECRET,
-          signOptions: { expiresIn: constants.JWT_EXPIRES_IN },
-        })
-      ],
-    providers: [AuthService, PersonService, JwtService, LocalStrategy, JwtStrategy], 
-    exports: [AuthService]
-    
+  imports: [
+    PersonModule,
+    PassportModule,
+    JwtModule.register({
+      secret: constants.JWT_SECRET,
+      signOptions: { expiresIn: constants.JWT_EXPIRES_IN },
+    }),
+  ],
+  providers: [
+    AuthService,
+    PersonService,
+    JwtService,
+    LocalStrategy,
+    JwtStrategy,
+  ],
+  exports: [AuthService],
 })
 export class AuthModule {}

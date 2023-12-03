@@ -57,12 +57,34 @@ export class EventService {
 
     mergedEvent.visualEndDate =
       mergedEvent.endDate.getTime() - mergedEvent.startDate.getTime() < 1200000
-        ? new Date(mergedEvent.startDate.getTime() + 1200000)
+        ? new Date(mergedEvent.startDate.getTime() + 1200000) // 20 minutes
         : mergedEvent.endDate;
 
-    // TODO: fail if day of endDate is different as day of startDate (not supported yet)
-    // TODO: fail if event overlaps with another event (not supported yet)
-    // TODO: return the event in GMT-5 timezone
+    // fail if day of endDate is different as day of startDate (not supported yet)
+    if (
+      mergedEvent.startDate.getDate() !== mergedEvent.endDate.getDate() ||
+      mergedEvent.startDate.getMonth() !== mergedEvent.endDate.getMonth() ||
+      mergedEvent.startDate.getFullYear() !== mergedEvent.endDate.getFullYear()
+    )
+      throw new BadRequestException(
+        'The event must start and end on the same day',
+      );
+
+    // fail if event overlaps with another event (not supported yet)
+    const events: EventEntity[] = await this.eventRepository.find({
+      where: { calendar: mergedEvent.calendar },
+    });
+    for (const e of events) {
+      if (
+        (mergedEvent.startDate.getTime() >= e.startDate.getTime() &&
+          mergedEvent.startDate.getTime() <= e.endDate.getTime()) ||
+        (mergedEvent.endDate.getTime() >= e.startDate.getTime() &&
+          mergedEvent.endDate.getTime() <= e.endDate.getTime())
+      )
+        throw new BadRequestException(
+          'The event overlaps with another event in the same calendar',
+        );
+    }
 
     mergedEvent.id = id;
 

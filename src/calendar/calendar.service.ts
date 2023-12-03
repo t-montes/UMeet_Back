@@ -94,12 +94,36 @@ export class CalendarService {
 
     event.visualEndDate =
       event.endDate.getTime() - event.startDate.getTime() < 1200000
-        ? new Date(event.startDate.getTime() + 1200000)
+        ? new Date(event.startDate.getTime() + 1200000) // 20 minutes
         : event.endDate;
 
-    // TODO: fail if day of endDate is different as day of startDate (not supported yet)
-    // TODO: fail if event overlaps with another event (not supported yet)
-    // TODO: return the event in GMT-5 timezone
+    // fail if day of endDate is different as day of startDate (not supported yet)
+    if (
+      event.startDate.getDate() !== event.endDate.getDate() ||
+      event.startDate.getMonth() !== event.endDate.getMonth() ||
+      event.startDate.getFullYear() !== event.endDate.getFullYear()
+    )
+      throw new BadRequestException(
+        'The event must start and end on the same day',
+      );
+
+    // fail if event overlaps with another event (not supported yet)
+    const events = await this.eventRepository.find({
+      where: { calendar: owner.calendar },
+    });
+    for (const e of events) {
+      if (
+        (event.startDate.getTime() >= e.startDate.getTime() &&
+          event.startDate.getTime() < e.endDate.getTime()) ||
+        (event.endDate.getTime() > e.startDate.getTime() &&
+          event.endDate.getTime() <= e.endDate.getTime()) ||
+        (event.startDate.getTime() <= e.startDate.getTime() &&
+          event.endDate.getTime() >= e.endDate.getTime())
+      )
+        throw new BadRequestException(
+          'The event overlaps with another event in the same calendar',
+        );
+    }
 
     event.calendar = owner.calendar;
     const persistedEvent = await this.eventRepository

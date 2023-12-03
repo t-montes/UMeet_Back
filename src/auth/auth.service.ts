@@ -17,7 +17,7 @@ export class AuthService {
         if (user && user.password === password) {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const { password, permissions, ...result } = user;
-            return {...result, permissions};
+            return { ...result, permissions };
         }
         return null;
     }
@@ -25,7 +25,7 @@ export class AuthService {
     async login(req: any) {
         const user: Person = await this.usersService.findOne(req.user.username);
         console.log(user);
-        const payload = { username: req.user.username, sub: req.user.id,  permissions: user.permissions};
+        const payload = { username: req.user.username, sub: req.user.id,  permissions: user.permissions };
         return {
             token: this.jwtService.sign(payload, { privateKey: constants.JWT_SECRET, expiresIn:constants.JWT_EXPIRES_IN }),
         };
