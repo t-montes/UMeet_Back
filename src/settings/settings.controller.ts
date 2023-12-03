@@ -1,9 +1,7 @@
 import {
   Controller,
   Get,
-  Post,
   Put,
-  Delete,
   Body,
   Param,
   NotFoundException,
@@ -16,7 +14,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @Controller('settings')
 export class SettingsController {
-  constructor(private readonly settingsService: SettingsService) { }
+  constructor(private readonly settingsService: SettingsService) {}
 
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<SettingsEntity> {
@@ -36,21 +34,18 @@ export class SettingsController {
   ): Promise<SettingsEntity> {
     const settings = new SettingsEntity();
     Object.assign(settings, settingsDto);
-    return await this.settingsService.update(
-      settingsId,
-      settings,
-      userId,
-    );
+    return await this.settingsService.update(settingsId, settings, userId);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get('/user/:userId')
-  async findAllByUser(@Param('userId') userId: string): Promise<SettingsEntity[]> {
+  async findAllByUser(
+    @Param('userId') userId: string,
+  ): Promise<SettingsEntity[]> {
     const settings = await this.settingsService.findAllByUserId(userId);
     if (settings.length === 0) {
       throw new NotFoundException('Settings not found for the user');
     }
     return settings;
   }
-
 }

@@ -11,7 +11,7 @@ export class SettingsService {
     private readonly settingsRepository: Repository<SettingsEntity>,
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
-  ) { }
+  ) {}
 
   async findAll(): Promise<SettingsEntity[]> {
     return await this.settingsRepository.find({ relations: ['user'] });
@@ -57,8 +57,15 @@ export class SettingsService {
     return await this.settingsRepository.save(settings);
   }
 
-  async update(id: string, settings: SettingsEntity, userId: string): Promise<SettingsEntity> {
-    const existingSettings = await this.settingsRepository.findOne({ where: { id }, relations: ['user'] });
+  async update(
+    id: string,
+    settings: SettingsEntity,
+    userId: string,
+  ): Promise<SettingsEntity> {
+    const existingSettings = await this.settingsRepository.findOne({
+      where: { id },
+      relations: ['user'],
+    });
 
     if (!existingSettings) {
       throw new BadRequestException('Settings not found');
@@ -107,5 +114,4 @@ export class SettingsService {
       relations: ['user'],
     });
   }
-
 }

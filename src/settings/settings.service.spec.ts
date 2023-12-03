@@ -107,11 +107,13 @@ describe('SettingsService', () => {
     settings.enableGrid = faker.datatype.boolean();
     settings.user = createdUser;
 
-    const newSettings: SettingsEntity = await service.create(settings, createdUser.id);
+    const newSettings: SettingsEntity = await service.create(
+      settings,
+      createdUser.id,
+    );
     expect(newSettings).not.toBeNull();
     expect(newSettings.user.id).toEqual(createdUser.id);
   });
-
 
   it('should update a settings', async () => {
     const settings = settingsList[0];
@@ -179,7 +181,10 @@ describe('SettingsService', () => {
     settings.enableGrid = faker.datatype.boolean();
     settings.user = createdUser;
 
-    const newSettings: SettingsEntity = await service.create(settings, createdUser.id);
+    const newSettings: SettingsEntity = await service.create(
+      settings,
+      createdUser.id,
+    );
     expect(newSettings).not.toBeNull();
   });
 
@@ -201,9 +206,8 @@ describe('SettingsService', () => {
     invalidSettings.user = createdUser;
 
     // Esperar que la creación falle con BadRequestException
-    await expect(service.create(invalidSettings, createdUser.id))
-      .rejects
-      .toThrow(BadRequestException);
+    await expect(
+      service.create(invalidSettings, createdUser.id),
+    ).rejects.toThrow(BadRequestException);
   });
-
 });
