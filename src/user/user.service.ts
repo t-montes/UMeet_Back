@@ -19,13 +19,13 @@ export class UserService {
   ) {}
 
   async findAll(): Promise<UserEntity[]> {
-    return await this.userRepository.find({relations: ['friends', 'groups']});
+    return await this.userRepository.find({ relations: ['friends', 'groups'] });
   }
 
   async findOne(id: string): Promise<UserEntity> {
     const user: UserEntity = await this.userRepository.findOne({
       where: { id },
-      relations: ['calendar', 'settings' , 'friends', 'groups'],
+      relations: ['calendar', 'settings', 'friends', 'groups'],
     });
     if (!user)
       throw new BadRequestException('The user with the given id was not found');

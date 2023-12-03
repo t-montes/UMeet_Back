@@ -7,7 +7,6 @@ import {
   Param,
   Body,
   HttpCode,
-  UseGuards,
 } from '@nestjs/common';
 import { UseInterceptors } from '@nestjs/common';
 import { BusinessErrorsInterceptor } from '../shared/interceptors/business-errors/business-errors.interceptor';
@@ -15,7 +14,6 @@ import { plainToInstance } from 'class-transformer';
 import { UserService } from './user.service';
 import { UserDTO } from './user.dto';
 import { UserEntity } from './user.entity';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @Controller('users')
 @UseInterceptors(BusinessErrorsInterceptor)

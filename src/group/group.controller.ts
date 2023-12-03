@@ -8,7 +8,7 @@ import {
   Post,
   Put,
   UseInterceptors,
-  UseGuards
+  UseGuards,
 } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { GroupService } from './group.service';
@@ -18,8 +18,6 @@ import { GroupDto } from './group.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from '../auth/guards/permission.guard';
 import { Permissions } from '../shared/decorators/permissions.decorator';
-
-
 
 @Controller('groups')
 @UseInterceptors(BusinessErrorsInterceptor)
