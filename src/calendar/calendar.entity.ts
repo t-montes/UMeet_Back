@@ -24,7 +24,9 @@ export class CalendarEntity {
   @JoinColumn()
   user: UserEntity;
 
-  @OneToOne(() => GroupEntity, (group) => group.calendar)
+  @OneToOne(() => GroupEntity, (group) => group.calendar, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn()
   group: GroupEntity;
 
