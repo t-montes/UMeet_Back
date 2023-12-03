@@ -9,6 +9,123 @@
 	},
 	"item": [
 		{
+			"name": "API login read",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var token = pm.response.json().token;\r",
+							"pm.globals.set(\"tokenRead\", token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"userRead\",\r\n    \"password\": \"read\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/people/login",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"people",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "API login write",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var token = pm.response.json().token;\r",
+							"pm.globals.set(\"tokenWrite\", token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"userWrite\",\r\n    \"password\": \"write\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/people/login",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"people",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "API login delete",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var token = pm.response.json().token;\r",
+							"pm.globals.set(\"tokenDelete\", token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"userDelete\",\r\n    \"password\": \"delete\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/people/login",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"people",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Create a User",
 			"event": [
 				{
@@ -27,6 +144,16 @@
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{tokenWrite}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
@@ -98,6 +225,16 @@
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{tokenWrite}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
@@ -169,6 +306,16 @@
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{tokenWrite}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
@@ -240,6 +387,16 @@
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{tokenRead}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
@@ -302,6 +459,16 @@
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{tokenRead}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
@@ -377,6 +544,16 @@
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{tokenRead}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
@@ -448,6 +625,16 @@
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{tokenWrite}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "PUT",
 				"header": [],
 				"body": {
@@ -525,6 +712,16 @@
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{tokenWrite}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "PUT",
 				"header": [],
 				"body": {
@@ -598,6 +795,16 @@
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{tokenDelete}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "DELETE",
 				"header": [],
 				"url": {
@@ -657,6 +864,16 @@
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{tokenDelete}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "DELETE",
 				"header": [],
 				"url": {
