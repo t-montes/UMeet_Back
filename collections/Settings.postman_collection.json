@@ -1,26 +1,21 @@
 {
 	"info": {
-		"_postman_id": "bb01e3a1-2329-4f24-8c73-f7c99538d66c",
+		"_postman_id": "35006f3d-df93-4eb2-a5db-2a7b7ed88637",
 		"name": "Settings",
-		"description": "- Settings\n    \n- User - Settings (1 - 1)",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "30796619",
-		"_collection_link": "https://umeet-web.postman.co/workspace/UMeet-Back~2b3a45ca-5850-4a60-96d4-831af07e8ded/collection/30796580-bb01e3a1-2329-4f24-8c73-f7c99538d66c?action=share&source=collection_link&creator=30796619"
+		"_exporter_id": "19767625",
+		"_collection_link": "https://solar-spaceship-244943.postman.co/workspace/aaa~ed20b85b-f663-45c4-851e-143e241a0f31/collection/19767625-35006f3d-df93-4eb2-a5db-2a7b7ed88637?action=share&source=collection_link&creator=19767625"
 	},
 	"item": [
 		{
-			"name": "Create a User",
+			"name": "API login user read",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"var data = pm.response.json()\r",
-							"pm.globals.set(\"user_id\", data.id);\r",
-							"\r",
-							"pm.test(\"Status code is 201\", function () {\r",
-							"   pm.response.to.have.status(201);\r",
-							"});"
+							"var token = pm.response.json().token;\r",
+							"pm.globals.set(\"tokenRead\", token);"
 						],
 						"type": "text/javascript"
 					}
@@ -31,7 +26,183 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"Emilio\",\r\n    \"login\": \"emil.io\",\r\n    \"email\": \"emil.io@gmail.com\",\r\n    \"password\": \"Emilio01\"\r\n}",
+					"raw": "{\r\n    \"username\": \"settingsRead\",\r\n    \"password\": \"read\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/people/login",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"people",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "API login user write",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var token = pm.response.json().token;\r",
+							"pm.globals.set(\"tokenWrite\", token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"settingsWrite\",\r\n    \"password\": \"write\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/people/login",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"people",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "API login user delete",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var token = pm.response.json().token;\r",
+							"pm.globals.set(\"tokenDelete\", token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"settingsDelete\",\r\n    \"password\": \"delete\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/people/login",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"people",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "API login user all",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var token = pm.response.json().token;\r",
+							"pm.globals.set(\"tokenUserAdmin\", token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"userAll\",\r\n    \"password\": \"admin\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/people/login",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"people",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear un user valido",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Response must have an ID and settings ID\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('id');",
+							"    pm.expect(jsonData).to.have.nested.property('settings.id');",
+							"    pm.globals.set(\"userId\", jsonData.id);",
+							"    pm.globals.set(\"settingsId\", jsonData.settings.id);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{tokenUserAdmin}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"Nombre del usuario\",\n  \"login\": \"loginUsuario\",\n  \"email\": \"usuario@example.com\",\n  \"password\": \"Password123!\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -48,121 +219,16 @@
 					]
 				}
 			},
-			"response": [
-				{
-					"name": "Create a User",
-					"originalRequest": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"id\": \"8051e048-de13-4539-9db4-5e7847515493\",\r\n    \"name\": \"Emilio\",\r\n    \"login\": \"emil.io\",\r\n    \"email\": \"emil.io@gmail.com\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseURL}}/users",
-							"host": [
-								"{{baseURL}}"
-							],
-							"path": [
-								"users"
-							]
-						}
-					},
-					"status": "Created",
-					"code": 201,
-					"_postman_previewlanguage": null,
-					"header": null,
-					"cookie": [],
-					"body": null
-				}
-			]
+			"response": []
 		},
 		{
-			"name": "Create default Settings",
+			"name": "Actualizar los settings de un usuario válido",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Status code is 201 (Created)\", function() {",
-							"    pm.response.to.have.status(201);",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n  \"startHour\": 9,\n  \"endHour\": 17,\n  \"lastLaborDay\": 5,\n  \"enableGrid\": true\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{baseURL}}/users/{{user_id}}/settings",
-					"host": [
-						"{{baseURL}}"
-					],
-					"path": [
-						"users",
-						"{{user_id}}",
-						"settings"
-					]
-				}
-			},
-			"response": [
-				{
-					"name": "Create default Settings",
-					"originalRequest": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"startHour\": 9,\n  \"endHour\": 17,\n  \"lastLaborDay\": 5,\n  \"enableGrid\": true\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseURL}}/users/{{user_id}}/settings",
-							"host": [
-								"{{baseURL}}"
-							],
-							"path": [
-								"users",
-								"{{user_id}}",
-								"settings"
-							]
-						}
-					},
-					"_postman_previewlanguage": null,
-					"header": null,
-					"cookie": [],
-					"body": null
-				}
-			]
-		},
-		{
-			"name": "Get Settings by User ID",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 200\", function() {",
+							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
 							"});"
 						],
@@ -171,73 +237,54 @@
 				}
 			],
 			"request": {
-				"method": "GET",
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{tokenWrite}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"startHour\": 10,\n  \"endHour\": 12\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": "{{baseURL}}/users/{{user_id}}/settings",
+					"raw": "{{baseURL}}/settings/{{settingsId}}/user/{{userId}}",
 					"host": [
 						"{{baseURL}}"
 					],
 					"path": [
-						"users",
-						"{{user_id}}",
-						"settings"
+						"settings",
+						"{{settingsId}}",
+						"user",
+						"{{userId}}"
 					]
 				}
 			},
-			"response": [
-				{
-					"name": "Get Settings by User ID",
-					"originalRequest": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"startHour\": 8,\n  \"endHour\": 18,\n  \"lastLaborDay\": 6,\n  \"enableGrid\": true\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseURL}}/users/{{user_id}}/settings",
-							"host": [
-								"{{baseURL}}"
-							],
-							"path": [
-								"users",
-								"{{user_id}}",
-								"settings"
-							]
-						}
-					},
-					"_postman_previewlanguage": null,
-					"header": null,
-					"cookie": [],
-					"body": null
-				}
-			]
+			"response": []
 		},
 		{
-			"name": "Get Settings by wrong User ID",
+			"name": "Actualizar los settings de un usuario válido con valores inválidos (1)",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Status code is 404\", function() {",
-							"    pm.response.to.have.status(404);",
-							"});",
-							"pm.test(\"Response should return an error message\", function() {",
-							"    pm.expect(pm.response.text()).to.include(\"User not found\");",
+							"pm.test(\"Status code is 400 and User not found\", function () {",
+							"    pm.response.to.have.status(400);",
+							"    pm.response.to.be.json;",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.include(\"Start hour must be less than end hour\");",
 							"});"
 						],
 						"type": "text/javascript"
@@ -245,69 +292,160 @@
 				}
 			],
 			"request": {
-				"method": "GET",
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{tokenWrite}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"startHour\": 16,\n  \"endHour\": 12\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": "{{baseURL}}/users/{{wrongUUID}}/settings",
+					"raw": "{{baseURL}}/settings/{{settingsId}}/user/{{userId}}",
 					"host": [
 						"{{baseURL}}"
 					],
 					"path": [
-						"users",
-						"{{wrongUUID}}",
-						"settings"
+						"settings",
+						"{{settingsId}}",
+						"user",
+						"{{userId}}"
 					]
 				}
 			},
-			"response": [
-				{
-					"name": "Get Settings by wrong User ID",
-					"originalRequest": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"message\": \"User not found\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseURL}}/users/{{wrongID}}/settings",
-							"host": [
-								"{{baseURL}}"
-							],
-							"path": [
-								"users",
-								"{{wrongID}}",
-								"settings"
-							]
-						}
-					},
-					"_postman_previewlanguage": null,
-					"header": null,
-					"cookie": [],
-					"body": null
-				}
-			]
+			"response": []
 		},
 		{
-			"name": "Update Settings by User ID",
+			"name": "Actualizar los settings de un usuario válido con valores inválidos (2)",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Status code is 200\", function() {",
+							"pm.test(\"Status code is 400 and User not found\", function () {",
+							"    pm.response.to.have.status(400);",
+							"    pm.response.to.be.json;",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.include(\"End hour must be between 1 and 24\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{tokenWrite}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"startHour\": 3,\n  \"endHour\": 27\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/settings/{{settingsId}}/user/{{userId}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"settings",
+						"{{settingsId}}",
+						"user",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Actualizar los settings de un usuario válido Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 and User not found\", function () {",
+							"    pm.response.to.have.status(400);",
+							"    pm.response.to.be.json;",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.include(\"User mismatch\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{tokenWrite}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"startHour\": 10,\n  \"endHour\": 12\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/settings/{{settingsId}}/user/{{wrongId}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"settings",
+						"{{settingsId}}",
+						"user",
+						"{{wrongId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener settings por user ID válido",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
 							"});",
 							""
@@ -317,75 +455,44 @@
 				}
 			],
 			"request": {
-				"method": "PUT",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n  \"startHour\": 9,\n  \"endHour\": 17,\n  \"lastLaborDay\": 5,\n  \"enableGrid\": true\n}\n",
-					"options": {
-						"raw": {
-							"language": "json"
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{tokenRead}}",
+							"type": "string"
 						}
-					}
+					]
 				},
+				"method": "GET",
+				"header": [],
 				"url": {
-					"raw": "{{baseURL}}/users/{{user_id}}/settings",
+					"raw": "{{baseURL}}/settings/user/{{userId}}",
 					"host": [
 						"{{baseURL}}"
 					],
 					"path": [
-						"users",
-						"{{user_id}}",
-						"settings"
+						"settings",
+						"user",
+						"{{userId}}"
 					]
 				}
 			},
-			"response": [
-				{
-					"name": "Update Settings by User ID",
-					"originalRequest": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"startHour\": 9,\n  \"endHour\": 17,\n  \"lastLaborDay\": 5,\n  \"enableGrid\": true\n}\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseURL}}/users/{{user_id}}/settings",
-							"host": [
-								"{{baseURL}}"
-							],
-							"path": [
-								"users",
-								"{{user_id}}",
-								"settings"
-							]
-						}
-					},
-					"_postman_previewlanguage": null,
-					"header": null,
-					"cookie": [],
-					"body": null
-				}
-			]
+			"response": []
 		},
 		{
-			"name": "Update Settings by wrong User ID",
+			"name": "Obtener settings por user ID inválido",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Status code is 404\", function() {",
+							"pm.test(\"Status code is 404 and User not found\", function () {",
 							"    pm.response.to.have.status(404);",
-							"});",
-							"pm.test(\"Response should return an error message\", function() {",
-							"    pm.expect(pm.response.text()).to.include(\"User not found\");",
+							"    pm.response.to.be.json;",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.include(\"Settings not found for the user\");",
 							"});"
 						],
 						"type": "text/javascript"
@@ -393,72 +500,44 @@
 				}
 			],
 			"request": {
-				"method": "PUT",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n  \"startHour\": 9,\n  \"endHour\": 17,\n  \"lastLaborDay\": 5,\n  \"enableGrid\": true\n}\n",
-					"options": {
-						"raw": {
-							"language": "json"
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{tokenRead}}",
+							"type": "string"
 						}
-					}
+					]
 				},
+				"method": "GET",
+				"header": [],
 				"url": {
-					"raw": "{{baseURL}}/users/{{wrongUUID}}/settings",
+					"raw": "{{baseURL}}/settings/user/{{wrongId}}",
 					"host": [
 						"{{baseURL}}"
 					],
 					"path": [
-						"users",
-						"{{wrongUUID}}",
-						"settings"
+						"settings",
+						"user",
+						"{{wrongId}}"
 					]
 				}
 			},
-			"response": [
-				{
-					"name": "Update Settings by wrong User ID",
-					"originalRequest": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"message\": \"User not found\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseURL}}/users/{{wrongID}}/settings",
-							"host": [
-								"{{baseURL}}"
-							],
-							"path": [
-								"users",
-								"{{wrongID}}",
-								"settings"
-							]
-						}
-					},
-					"_postman_previewlanguage": null,
-					"header": null,
-					"cookie": [],
-					"body": null
-				}
-			]
+			"response": []
 		},
 		{
-			"name": "Delete a User",
+			"name": "Obtener settings inexistentes",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Status code is 204\", function () {\r",
-							"   pm.response.to.have.status(204);\r",
+							"pm.test(\"The settings with the given id was not found\", function () {",
+							"    pm.response.to.have.status(400);",
+							"    pm.response.to.be.json;",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.include(\"The settings with the given id was not found\");",
 							"});"
 						],
 						"type": "text/javascript"
@@ -466,44 +545,71 @@
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{tokenRead}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/settings/{{wrongId}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"settings",
+						"{{wrongId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Eliminar usuario",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204\", function () {",
+							"    pm.response.to.have.status(204);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{tokenUserAdmin}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "{{baseURL}}/users/{{user_id}}",
+					"raw": "{{baseURL}}/users/{{userId}}",
 					"host": [
 						"{{baseURL}}"
 					],
 					"path": [
 						"users",
-						"{{user_id}}"
+						"{{userId}}"
 					]
 				}
 			},
-			"response": [
-				{
-					"name": "Delete a User",
-					"originalRequest": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{baseURL}}/users/{{user_id}}",
-							"host": [
-								"{{baseURL}}"
-							],
-							"path": [
-								"users",
-								"{{user_id}}"
-							]
-						}
-					},
-					"status": "No Content",
-					"code": 204,
-					"_postman_previewlanguage": null,
-					"header": null,
-					"cookie": [],
-					"body": null
-				}
-			]
+			"response": []
 		}
 	]
 }
