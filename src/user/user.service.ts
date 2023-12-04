@@ -16,7 +16,7 @@ export class UserService {
     private readonly calendarRepository: Repository<CalendarEntity>,
     @InjectRepository(SettingsEntity)
     private readonly settingsRepository: Repository<SettingsEntity>,
-  ) {}
+  ) { }
 
   async findAll(): Promise<UserEntity[]> {
     return await this.userRepository.find({ relations: ['friends', 'groups'] });
@@ -156,6 +156,7 @@ export class UserService {
     const friendIndex = user.friends.findIndex(
       (friend) => friend.id === friendId,
     );
+
     if (friendIndex === -1) {
       throw new BadRequestException('Friend not found');
     }
@@ -165,6 +166,7 @@ export class UserService {
 
     return user;
   }
+
 
   async findFriends(userId: string): Promise<UserEntity[]> {
     const user = await this.userRepository.findOne({
@@ -191,4 +193,19 @@ export class UserService {
 
     return user.groups;
   }
+
+  async findNonFriends(userId: string): Promise<UserEntity[]> {
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+      relations: ['friends'],
+    });
+
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
+
+    const allUsers = await this.userRepository.find();
+    return allUsers.filter(u => u.id !== userId && !user.friends.some(f => f.id === u.id));
+  }
+
 }

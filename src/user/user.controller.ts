@@ -97,4 +97,12 @@ export class UserController {
   async findFriendsByUserId(@Param('userId') userId: string) {
     return await this.userService.findFriends(userId);
   }
+
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @Permissions('users:read')
+  @Get(':userId/non-friends')
+  async findNonFriendsByUserId(@Param('userId') userId: string) {
+    return await this.userService.findNonFriends(userId);
+  }
+
 }
