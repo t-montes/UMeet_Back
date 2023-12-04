@@ -19,7 +19,7 @@ export class GroupEntity {
   @Column({ length: 500 })
   name: string;
 
-  @Column('text')
+  @Column('text', { nullable: true })
   topic: string;
 
   @ManyToMany(() => UserEntity, (user) => user.groups)
