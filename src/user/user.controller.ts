@@ -21,7 +21,7 @@ import { Permissions } from '../shared/decorators/permissions.decorator';
 @Controller('users')
 @UseInterceptors(BusinessErrorsInterceptor)
 export class UserController {
-  constructor(private readonly userService: UserService) { }
+  constructor(private readonly userService: UserService) {}
 
   @UseGuards(JwtAuthGuard, PermissionsGuard)
   @Permissions('users:read')
@@ -104,5 +104,4 @@ export class UserController {
   async findNonFriendsByUserId(@Param('userId') userId: string) {
     return await this.userService.findNonFriends(userId);
   }
-
 }

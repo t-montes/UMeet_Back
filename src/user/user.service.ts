@@ -16,7 +16,7 @@ export class UserService {
     private readonly calendarRepository: Repository<CalendarEntity>,
     @InjectRepository(SettingsEntity)
     private readonly settingsRepository: Repository<SettingsEntity>,
-  ) { }
+  ) {}
 
   async findAll(): Promise<UserEntity[]> {
     return await this.userRepository.find({ relations: ['friends', 'groups'] });
@@ -167,7 +167,6 @@ export class UserService {
     return user;
   }
 
-
   async findFriends(userId: string): Promise<UserEntity[]> {
     const user = await this.userRepository.findOne({
       where: { id: userId },
@@ -205,7 +204,8 @@ export class UserService {
     }
 
     const allUsers = await this.userRepository.find();
-    return allUsers.filter(u => u.id !== userId && !user.friends.some(f => f.id === u.id));
+    return allUsers.filter(
+      (u) => u.id !== userId && !user.friends.some((f) => f.id === u.id),
+    );
   }
-
 }
