@@ -12,7 +12,7 @@ export class NotificationEntity {
   @Column()
   date: Date;
 
-  @Column()
+  @Column({ nullable: true })
   redirection: string;
 
   @ManyToOne(() => UserEntity, (user) => user.notifications, {
