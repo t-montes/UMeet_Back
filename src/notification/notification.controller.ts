@@ -21,14 +21,14 @@ export class NotificationController {
   constructor(private readonly notificationService: NotificationService) {}
 
   @UseGuards(JwtAuthGuard, PermissionsGuard)
-  @Permissions('users:read')
+  @Permissions('notification:read')
   @Get()
   async findAll(): Promise<NotificationEntity[]> {
     return await this.notificationService.findAll();
   }
 
   @UseGuards(JwtAuthGuard, PermissionsGuard)
-  @Permissions('users:read')
+  @Permissions('notification:read')
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<NotificationEntity> {
     const notification = await this.notificationService.findOne(id);
@@ -39,7 +39,7 @@ export class NotificationController {
   }
 
   @UseGuards(JwtAuthGuard, PermissionsGuard)
-  @Permissions('users:write')
+  @Permissions('notification:write')
   @Post()
   async create(
     @Body() notificationDto: NotificationDto,
@@ -53,7 +53,7 @@ export class NotificationController {
   }
 
   @UseGuards(JwtAuthGuard, PermissionsGuard)
-  @Permissions('users:write')
+  @Permissions('notification:write')
   @Put(':notificationId/user/:userId')
   async update(
     @Param('notificationId') notificationId: string,
@@ -70,7 +70,7 @@ export class NotificationController {
   }
 
   @UseGuards(JwtAuthGuard, PermissionsGuard)
-  @Permissions('users:delete')
+  @Permissions('notification:delete')
   @Delete(':id')
   async delete(@Param('id') id: string): Promise<void> {
     const notification = await this.notificationService.findOne(id);
@@ -81,7 +81,7 @@ export class NotificationController {
   }
 
   @UseGuards(JwtAuthGuard, PermissionsGuard)
-  @Permissions('users:read')
+  @Permissions('notification:read')
   @Get('/user/:userId')
   async findAllByUser(
     @Param('userId') userId: string,

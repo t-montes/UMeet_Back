@@ -11,7 +11,7 @@ export class PersonService {
       calendars: ['read', 'write', 'delete'],
       events: ['read', 'write', 'delete'],
       settings: ['read', 'write', 'delete'],
-      notifications: ['read', 'write', 'delete'],
+      notification: ['read', 'write', 'delete'],
     }),
     /* -------------------- group -------------------- */
     new APIUser(1, 'groupAll', 'admin', ['admin'], {
@@ -80,16 +80,16 @@ export class PersonService {
     }),
     /* -------------------- notification -------------------- */
     new APIUser(21, 'notificationAll', 'admin', ['admin'], {
-      notifications: ['read', 'write', 'delete'],
+      notification: ['read', 'write', 'delete'],
     }),
     new APIUser(22, 'notificationRead', 'read', ['user'], {
-      notifications: ['read'],
+      notification: ['read'],
     }),
     new APIUser(23, 'notificationWrite', 'write', ['user'], {
-      notifications: ['write'],
+      notification: ['write'],
     }),
     new APIUser(24, 'notificationDelete', 'delete', ['user'], {
-      notifications: ['delete'],
+      notification: ['delete'],
     }),
   ];
 

@@ -19,7 +19,7 @@ export class SettingsController {
   constructor(private readonly settingsService: SettingsService) {}
 
   @UseGuards(JwtAuthGuard, PermissionsGuard)
-  @Permissions('users:read')
+  @Permissions('settings:read')
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<SettingsEntity> {
     const settings = await this.settingsService.findOne(id);
@@ -30,7 +30,7 @@ export class SettingsController {
   }
 
   @UseGuards(JwtAuthGuard, PermissionsGuard)
-  @Permissions('users:read')
+  @Permissions('settings:read')
   @Get('/user/:userId')
   async findAllByUser(@Param('userId') userId: string): Promise<SettingsEntity[]> {
     const settings = await this.settingsService.findAllByUserId(userId);
@@ -41,7 +41,7 @@ export class SettingsController {
   }
 
   @UseGuards(JwtAuthGuard, PermissionsGuard)
-  @Permissions('users:write')
+  @Permissions('settings:write')
   @Put(':settingsId/user/:userId')
   async update(
     @Param('settingsId') settingsId: string,
