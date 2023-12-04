@@ -239,10 +239,45 @@ describe('UserService', () => {
 
   it('removeFriend should throw an exception for non-existent friend', async () => {
     const user1: UserEntity = usersList[0];
-    const user2: UserEntity = usersList[1]; // Asumir que user2 no es amigo de user1
+    const user2: UserEntity = usersList[1];
 
     await expect(
       service.removeFriend(user1.id, user2.id),
     ).rejects.toHaveProperty('message', 'Friend not found');
   });
+
+  it('findNonFriends should return users who are not friends with the specified user', async () => {
+    const user1: UserEntity = usersList[0];
+    const user2: UserEntity = usersList[1];
+    const nonFriends = await service.findNonFriends(user1.id);
+    expect(nonFriends.some(u => u.id === user2.id)).toBeTruthy();
+    expect(nonFriends.some(u => u.id === user1.id)).toBeFalsy();
+  });
+
+  it('findNonFriends should throw an exception for a non-existent user', async () => {
+    const nonExistentId = 'non-existent-id';
+    await expect(service.findNonFriends(nonExistentId)).rejects.toHaveProperty(
+      'message',
+      'User not found'
+    );
+  });
+
+  it('removeFriend should throw an exception when users are not friends', async () => {
+    const user1: UserEntity = usersList[0];
+    const user2: UserEntity = usersList[1];
+
+    const user1WithFriends = await userRepository.findOne({
+      where: { id: user1.id },
+      relations: ['friends'],
+    });
+    const isFriend = user1WithFriends.friends.some(friend => friend.id === user2.id);
+    if (isFriend) {
+      await service.removeFriend(user1.id, user2.id);
+    }
+
+    await expect(service.removeFriend(user1.id, user2.id))
+      .rejects
+      .toHaveProperty('message', 'Friend not found');
+  });
+
 });
