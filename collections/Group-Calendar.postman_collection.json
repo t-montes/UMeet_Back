@@ -4,8 +4,8 @@
 		"name": "Group-Calendar",
 		"description": "- Group - Calendar (0..1 - 1)",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "30796580",
-		"_collection_link": "https://umeet-web.postman.co/workspace/UMeet-Back~2b3a45ca-5850-4a60-96d4-831af07e8ded/collection/30796580-ca3773cc-5343-402d-938d-be4dcc8bf57a?action=share&source=collection_link&creator=30796580"
+		"_exporter_id": "14951485",
+		"_collection_link": "https://umeet-web.postman.co/workspace/UMeet-Back~2b3a45ca-5850-4a60-96d4-831af07e8ded/collection/30796580-ca3773cc-5343-402d-938d-be4dcc8bf57a?action=share&source=collection_link&creator=14951485"
 	},
 	"item": [
 		{
@@ -1022,16 +1022,6 @@
 				{
 					"name": "Delete a User",
 					"originalRequest": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{tokenDelete}}",
-									"type": "string"
-								}
-							]
-						},
 						"method": "DELETE",
 						"header": [],
 						"url": {
@@ -1045,10 +1035,12 @@
 							]
 						}
 					},
-					"_postman_previewlanguage": "",
-					"header": "",
+					"status": "No Content",
+					"code": 204,
+					"_postman_previewlanguage": null,
+					"header": null,
 					"cookie": [],
-					"body": ""
+					"body": null
 				}
 			]
 		}
