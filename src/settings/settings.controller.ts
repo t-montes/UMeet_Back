@@ -11,11 +11,15 @@ import { SettingsService } from './settings.service';
 import { SettingsDto } from './settings.dto';
 import { SettingsEntity } from './settings.entity';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { PermissionsGuard } from '../auth/guards/permission.guard';
+import { Permissions } from '../shared/decorators/permissions.decorator';
 
 @Controller('settings')
 export class SettingsController {
   constructor(private readonly settingsService: SettingsService) {}
 
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @Permissions('settings:read')
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<SettingsEntity> {
     const settings = await this.settingsService.findOne(id);
@@ -25,7 +29,19 @@ export class SettingsController {
     return settings;
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @Permissions('settings:read')
+  @Get('/user/:userId')
+  async findAllByUser(@Param('userId') userId: string): Promise<SettingsEntity[]> {
+    const settings = await this.settingsService.findAllByUserId(userId);
+    if (settings.length === 0) {
+      throw new NotFoundException('Settings not found for the user');
+    }
+    return settings;
+  }
+
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @Permissions('settings:write')
   @Put(':settingsId/user/:userId')
   async update(
     @Param('settingsId') settingsId: string,
@@ -37,15 +53,4 @@ export class SettingsController {
     return await this.settingsService.update(settingsId, settings, userId);
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Get('/user/:userId')
-  async findAllByUser(
-    @Param('userId') userId: string,
-  ): Promise<SettingsEntity[]> {
-    const settings = await this.settingsService.findAllByUserId(userId);
-    if (settings.length === 0) {
-      throw new NotFoundException('Settings not found for the user');
-    }
-    return settings;
-  }
 }

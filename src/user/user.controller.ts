@@ -21,7 +21,7 @@ import { Permissions } from '../shared/decorators/permissions.decorator';
 @Controller('users')
 @UseInterceptors(BusinessErrorsInterceptor)
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService) { }
 
   @UseGuards(JwtAuthGuard, PermissionsGuard)
   @Permissions('users:read')
@@ -68,5 +68,33 @@ export class UserController {
   @HttpCode(204)
   async delete(@Param('userId') userId: string) {
     return await this.userService.delete(userId);
+  }
+
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @Permissions('users:write')
+  @Post(':userId/friends/:friendId')
+  async addFriend(
+    @Param('userId') userId: string,
+    @Param('friendId') friendId: string,
+  ) {
+    return await this.userService.addFriend(userId, friendId);
+  }
+
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @Permissions('users:delete')
+  @Delete(':userId/friends/:friendId')
+  @HttpCode(204)
+  async removeFriend(
+    @Param('userId') userId: string,
+    @Param('friendId') friendId: string,
+  ) {
+    await this.userService.removeFriend(userId, friendId);
+  }
+
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @Permissions('users:read')
+  @Get(':userId/friends')
+  async findFriendsByUserId(@Param('userId') userId: string) {
+    return await this.userService.findFriends(userId);
   }
 }

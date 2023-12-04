@@ -10,6 +10,8 @@ export class PersonService {
       users: ['read', 'write', 'delete'],
       calendars: ['read', 'write', 'delete'],
       events: ['read', 'write', 'delete'],
+      settings: ['read', 'write', 'delete'],
+      notification: ['read', 'write', 'delete'],
     }),
     /* -------------------- group -------------------- */
     new APIUser(1, 'groupAll', 'admin', ['admin'], {
@@ -62,6 +64,32 @@ export class PersonService {
     }),
     new APIUser(16, 'eventDelete', 'delete', ['user'], {
       events: ['delete'],
+    }),
+    /* -------------------- settings -------------------- */
+    new APIUser(17, 'settingsAll', 'admin', ['admin'], {
+      settings: ['read', 'write', 'delete'],
+    }),
+    new APIUser(18, 'settingsRead', 'read', ['user'], {
+      settings: ['read'],
+    }),
+    new APIUser(19, 'settingsWrite', 'write', ['user'], {
+      settings: ['write'],
+    }),
+    new APIUser(20, 'settingsDelete', 'delete', ['user'], {
+      settings: ['delete'],
+    }),
+    /* -------------------- notification -------------------- */
+    new APIUser(21, 'notificationAll', 'admin', ['admin'], {
+      notification: ['read', 'write', 'delete'],
+    }),
+    new APIUser(22, 'notificationRead', 'read', ['user'], {
+      notification: ['read'],
+    }),
+    new APIUser(23, 'notificationWrite', 'write', ['user'], {
+      notification: ['write'],
+    }),
+    new APIUser(24, 'notificationDelete', 'delete', ['user'], {
+      notification: ['delete'],
     }),
   ];
 

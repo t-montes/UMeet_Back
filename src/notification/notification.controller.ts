@@ -13,16 +13,22 @@ import { NotificationService } from './notification.service';
 import { NotificationDto } from './notification.dto';
 import { NotificationEntity } from './notification.entity';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { PermissionsGuard } from '../auth/guards/permission.guard';
+import { Permissions } from '../shared/decorators/permissions.decorator';
 
 @Controller('notifications')
 export class NotificationController {
   constructor(private readonly notificationService: NotificationService) {}
 
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @Permissions('notification:read')
   @Get()
   async findAll(): Promise<NotificationEntity[]> {
     return await this.notificationService.findAll();
   }
 
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @Permissions('notification:read')
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<NotificationEntity> {
     const notification = await this.notificationService.findOne(id);
@@ -32,7 +38,8 @@ export class NotificationController {
     return notification;
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @Permissions('notification:write')
   @Post()
   async create(
     @Body() notificationDto: NotificationDto,
@@ -45,7 +52,8 @@ export class NotificationController {
     );
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @Permissions('notification:write')
   @Put(':notificationId/user/:userId')
   async update(
     @Param('notificationId') notificationId: string,
@@ -61,7 +69,8 @@ export class NotificationController {
     );
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @Permissions('notification:delete')
   @Delete(':id')
   async delete(@Param('id') id: string): Promise<void> {
     const notification = await this.notificationService.findOne(id);
@@ -71,7 +80,8 @@ export class NotificationController {
     await this.notificationService.delete(id);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @Permissions('notification:read')
   @Get('/user/:userId')
   async findAllByUser(
     @Param('userId') userId: string,
