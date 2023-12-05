@@ -27,6 +27,9 @@ export class UserEntity {
   @Column()
   login: string;
 
+  @Column({ nullable: true })
+  image: string;
+
   @Column()
   @IsEmail()
   email: string;
