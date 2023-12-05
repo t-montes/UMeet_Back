@@ -2,11 +2,26 @@ import uuid
 from faker import Faker
 import random
 from datetime import datetime, timedelta
+import requests
+
 
 sql = "-- Usuarios\n\n"
 
 # Inicializar Faker
 fake = Faker()
+
+def get_unsplash_image():
+    access_key = 'zGEKQcn38W8E0A-gem7WG7e9KfCiwzi8885gvmp7sVI'
+    desired_width = 800 
+    desired_height = 800  
+    orientation = "landscape"
+    url = f"https://api.unsplash.com/photos/random/?query=profile&client_id={access_key}&w={desired_width}&h={desired_height}&orientation={orientation}"
+    response = requests.get(url)
+    
+    if response.status_code == 200:
+        return response.json()['urls']['regular']
+    else:
+        return "https://source.unsplash.com/random"
 
 # Crear datos para la tabla 'user_entity'
 def generate_user_entity_data(n):
@@ -23,7 +38,6 @@ def generate_user_entity_data(n):
         while email in emails:
             login = fake.user_name()
             email = f"{login}@uniandes.edu.co"
-
         emails.add(email)
 
         # Generar un UUID único
@@ -32,18 +46,21 @@ def generate_user_entity_data(n):
         # Generar una contraseña
         password = fake.password(length=10, special_chars=True, digits=True, upper_case=True, lower_case=True)
 
+        # Obtener un URL de imagen de Unsplash
+        image = get_unsplash_image()
+
         # Añadir a la lista de datos
-        data.append((user_id, name, login, email, password))
+        data.append((user_id, name, login, email, password, image))
 
     return data
 
+
 # Generar 30 registros para 'user_entity'
-user_entity_data = generate_user_entity_data(30)
+user_entity_data = generate_user_entity_data(20)
 
 # Imprimir los comandos SQL
-for user_id, name, login, email, password in user_entity_data:
-    sql += f"INSERT INTO user_entity (id, name, login, email, password) VALUES ('{user_id}', '{name}', '{login}', '{email}', '{password}');\n"
-
+for user_id, name, login, email, password, image in user_entity_data:
+    sql += f"INSERT INTO user_entity (id, name, login, email, password, image) VALUES ('{user_id}', '{name}', '{login}', '{email}', '{password}', '{image}');\n"
 sql += "\n-- Settings (generados automáticamente en el API)\n\n"
 
 # Función para generar datos de 'settings'
@@ -62,7 +79,7 @@ def generate_settings_data(user_ids):
     return data
 
 # Asumiendo que 'user_entity_data' es la lista de usuarios que generaste previamente
-user_ids = [user_id for user_id, _, _, _, _ in user_entity_data]
+user_ids = [user_id for user_id, _, _, _, _, _ in user_entity_data]
 
 # Generar datos para 'settings'
 settings_data = generate_settings_data(user_ids)
@@ -92,7 +109,7 @@ def generate_friendships(user_ids, min_friends=5):
     return friendships
 
 # Asumiendo que 'user_ids' es la lista de IDs de usuarios generados previamente
-friendships_data = generate_friendships([user_id for user_id, _, _, _, _ in user_entity_data])
+friendships_data = generate_friendships([user_id for user_id, _, _, _, _, _ in user_entity_data])
 
 # Imprimir los comandos SQL para 'user_entity_friends_user_entity'
 for user1, user2 in friendships_data:
@@ -129,7 +146,7 @@ def generate_group_entity_data(user_ids, group_names, n):
     return data
 
 # Asumiendo que 'user_entity_data' es la lista de usuarios que generaste previamente
-user_ids = [user_id for user_id, _, _, _, _ in user_entity_data]
+user_ids = [user_id for user_id, _, _, _, _, _ in user_entity_data]
 
 # Generar datos para 'group_entity'
 group_entity_data = generate_group_entity_data(user_ids, group_names, 40)  # Cambiar el 10 por la cantidad deseada
