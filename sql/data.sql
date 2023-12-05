@@ -1,5 +1,6 @@
 -- Usuarios
 
+INSERT INTO user_entity (id, name, login, email, password) VALUES ('381cc76d-0c7d-41be-b2d5-0be3995005fd', 'Tony Montes', 't.montes', 't.montes@uniandes.edu.co', '_My7zBq7E(');
 INSERT INTO user_entity (id, name, login, email, password) VALUES ('cdab710d-935a-44f1-ba83-5cef3a7faf48', 'Patrick Newton', 'amanda27', 'amanda27@uniandes.edu.co', 'F47UGFxy#i');
 INSERT INTO user_entity (id, name, login, email, password) VALUES ('d0b2bf68-0f18-4658-af5f-4a426029dafe', 'Rhonda Barber', 'zmassey', 'zmassey@uniandes.edu.co', '^J1G7cC6OM');
 INSERT INTO user_entity (id, name, login, email, password) VALUES ('2b3eb538-2643-42ae-9370-f2642bb60f73', 'Ann Cox', 'thompsonbrandon', 'thompsonbrandon@uniandes.edu.co', 'E7azq^r1+P');
@@ -24,7 +25,6 @@ INSERT INTO user_entity (id, name, login, email, password) VALUES ('65f3d6e6-f83
 INSERT INTO user_entity (id, name, login, email, password) VALUES ('d44af52d-3e1f-48d4-965d-2e31229db7fb', 'Joseph Nguyen', 'klewis', 'klewis@uniandes.edu.co', '_3Wn9AwpCS');
 INSERT INTO user_entity (id, name, login, email, password) VALUES ('b0087e14-107a-4a50-9944-14f56a6a18b2', 'Brian Nelson', 'nancy77', 'nancy77@uniandes.edu.co', 'k7EywD+d&x');
 INSERT INTO user_entity (id, name, login, email, password) VALUES ('f14966d1-ce89-48cd-b6fd-f49b4f87ad53', 'Ray Douglas', 'twade', 'twade@uniandes.edu.co', 'i!XdC4Cabu');
-INSERT INTO user_entity (id, name, login, email, password) VALUES ('381cc76d-0c7d-41be-b2d5-0be3995005fd', 'Harold Cruz', 'oscar33', 'oscar33@uniandes.edu.co', '_My7zBq7E(');
 INSERT INTO user_entity (id, name, login, email, password) VALUES ('55af83d8-e2a7-4231-922f-e9a16e34ac0c', 'Gregory Zimmerman', 'gnichols', 'gnichols@uniandes.edu.co', '$rPy9IulRe');
 INSERT INTO user_entity (id, name, login, email, password) VALUES ('086e80c4-4449-4648-85d7-3e3f748a58ed', 'Kathryn Thompson', 'colesharon', 'colesharon@uniandes.edu.co', '#9ff@Gllpx');
 INSERT INTO user_entity (id, name, login, email, password) VALUES ('6d9b04ac-b51c-4b28-9310-2f7a92c1f457', 'Kelsey Sims', 'laurenrivas', 'laurenrivas@uniandes.edu.co', '04kS7cCk*b');
